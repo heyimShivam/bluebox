@@ -8,8 +8,6 @@ admin.site.unregister(User)
 admin.site.unregister(Group)
 """Inline Models"""
 
-# CategoryAdmin inlines
-
 
 class SubCategoryInline(admin.StackedInline):
     model = models.SubCategory
@@ -25,11 +23,11 @@ class CategoryAdmin(admin.ModelAdmin):
     inlines = [SubCategoryInline]
 
 
-@admin.register(models.Item)
+@admin.register(models.Product)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ("item_category", "title", "price",)
-    search_fields = ["item_category", "title", "unit"]
-    fields = ["item_category", "rental_period", "title", "price", "unit", "image"]
+    list_display = ("product_category", "title", "price",)
+    search_fields = ["product_category", "title", "unit"]
+    fields = ["product_category", "rental", "title", "price", "unit", "image"]
 
 
 @admin.register(models.RentalPeriod)

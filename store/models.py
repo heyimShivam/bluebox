@@ -29,8 +29,16 @@ class TimeSlots(TimeStampedModel):
 
 
 class RentalPeriod(TimeStampedModel):
+    id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
     period = models.CharField(max_length=100, verbose_name="Rental Period", help_text="Add period like 1 week,2 week etc")
+    slug = models.SlugField(unique=True, blank=True)
     price = models.FloatField()
+    is_active = models.BooleanField(default=True)
+    sort_by = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.period)
+        super(RentalPeriod, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.period
@@ -52,7 +60,8 @@ class ExtraWork(TimeStampedModel):
 class Location(TimeStampedModel):
     """Add delivery Locations here"""
 
-    title = models.CharField(max_length=100,verbose_name="Location", help_text="Add location i.e city,country etc")
+    title = models.CharField(max_length=100, verbose_name="Location", help_text="Add location i.e city,country etc")
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -110,33 +119,57 @@ class SubCategory(TimeStampedModel):
 
 def upload_to(instance, filename):
     filename_base, filename_ext = os.path.splitext(filename)
-    return "{category}/{item_category}/{filename}{extension}".format(
-        category=slugify(instance.item_category.category.title),
-        item_category=slugify(instance.item_category.title),
+    return "{category}/{product_category}/{filename}{extension}".format(
+        category=slugify(instance.product_category.category.title),
+        product_category=slugify(instance.product_category.title),
         filename=slugify(filename_base),
         extension=filename_ext.lower(),
     )
 
 
-class Item(TimeStampedModel):
-    """ Subcategory vise item will be stored here"""
-    item_category = models.ForeignKey(
+class Product(TimeStampedModel):
+    """ Subcategory vise product will be stored here"""
+    product_category = models.ForeignKey(
         'store.SubCategory',
         verbose_name=('Sub Category'),
-        related_name='items',
+        related_name='products',
         on_delete=models.CASCADE,
     )
-    rental_period = models.ForeignKey(
+    rental = models.ForeignKey(
         "store.RentalPeriod",
         verbose_name=_("Rental Period"),
         on_delete=models.DO_NOTHING
     )
+    discount = models.ForeignKey("order.Discount", null=True, blank=True, on_delete=models.DO_NOTHING)
     id = models.UUIDField(default=uuid4, editable=False, primary_key=True)
-    title = models.CharField(max_length=100, verbose_name="Item Name")
-    image = models.ImageField(upload_to=upload_to)
+    title = models.CharField(max_length=100, verbose_name="Product Name")
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True)
     price = models.FloatField()
-    unit = models.CharField(max_length=64, help_text="Add item unit i.e $2 per lb,per week,per roll etc.")
+    unit = models.CharField(max_length=64, help_text="Add product unit i.e $2 per lb,per week,per roll etc.")
     description = RichTextField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
+
+# Quote
+
+
+class Quote(TimeStampedModel):
+    full_name = models.CharField(max_length=64, verbose_name="Full Name")
+    email = models.EmailField(max_length=100, verbose_name="Email")
+    phone = models.CharField(max_length=15, verbose_name="Phone Number")
+    address = models.TextField(verbose_name="Where Do you live")
+    delivery_date = models.DateField()
+
+    def __str__(self):
+        return self.full_name
+
+# Newsletter
+
+
+class Newsletter(TimeStampedModel):
+    email = models.EmailField(max_length=100)
+
+    def __str__(self):
+        return self.email

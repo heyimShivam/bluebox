@@ -38,14 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'rest_framework_swagger',
+    'drf_yasg',
     'ckeditor',
     'django_seed',
     'import_export',
     # my apps
     'pages',
-    'store'
+    'store',
+    'order'
 ]
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

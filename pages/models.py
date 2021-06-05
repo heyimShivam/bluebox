@@ -8,12 +8,41 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
-# Create your models here.
 
 
 class Home(TimeStampedModel):
     """docstring for Home"""
+    banner = models.ImageField(upload_to="home", null=True, blank=True)
+    content = RichTextField(null=True, blank=True)
+
+
+class Testimonial(TimeStampedModel):
+    name = models.CharField(max_length=100)
+    occupation = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to="temtimonials")
     content = RichTextField()
+
+    def __str__(self):
+        return self.name
+
+
+class WhyChooseUs(TimeStampedModel):
+    home = models.ForeignKey(Home, null=True, blank=True, on_delete=models.CASCADE)
+    heading = models.CharField(max_length=255)
+    content = RichTextField()
+
+    def __str__(self):
+        return self.heading
+
+
+class ContactUsInfo(TimeStampedModel):
+    home = models.ForeignKey(Home, null=True, blank=True, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+
+    def __str__(self):
+        return self.email + " " + self.phone_number
 
 
 class FAQ(TimeStampedModel):
