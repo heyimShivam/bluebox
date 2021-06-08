@@ -155,7 +155,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': "/home/kishan/projects/fivver/bluebox/backend/bluebox/custom_logs/debug.log",
+            'filename': "/home/project/bluebox/custom_logs/debug.log",
         },
     },
     'loggers': {
