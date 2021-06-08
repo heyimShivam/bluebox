@@ -5,6 +5,11 @@ from rest_framework.permissions import IsAdminUser
 from store import models
 from store import serializers
 
+import logging
+logger = logging.getLogger(__name__)
+
+logger.exception("jhsfjkhsk jhfkjshdkfjhsjfks")
+
 
 class RentalListView(generics.ListAPIView):
     """Fetch all active rentals list"""

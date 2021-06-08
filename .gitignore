@@ -3,8 +3,8 @@
 !**/migrations/__init__.py
 
 __pycache__/
-*.pyc
-
+*.py[cod]
+*$py.class
 
 # Environments
 .env
