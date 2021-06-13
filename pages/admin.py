@@ -2,23 +2,27 @@ from django.contrib import admin
 from pages import models
 
 
-class WhyChooseUsInline(admin.StackedInline):
+@admin.register(models.WhyChooseUs)
+class WhyChooseUsAdmin(admin.ModelAdmin):
     model = models.WhyChooseUs
-    extra = 0
     fields = ["heading", "content"]
+    list_display = ("heading", "content",)
+    search_fields = ["heading", "content__icontains"]
 
 
-class ContactUsInfoInline(admin.StackedInline):
+@admin.register(models.ContactUsInfo)
+class ContactUsInfoAdmin(admin.ModelAdmin):
     model = models.ContactUsInfo
-    extra = 0
     fields = ["email", "address", "phone_number"]
+    list_display = ("email", "address", "phone_number",)
+    search_fields = ["email", "address", "phone_number"]
 
 
 @admin.register(models.Home)
 class HomeAdmin(admin.ModelAdmin):
     list_display = ("content",)
     search_fields = ["content"]
-    inlines = [WhyChooseUsInline, ContactUsInfoInline]
+    # inlines = [WhyChooseUsInline, ContactUsInfoInline]
 
 
 @admin.register(models.Testimonial)
