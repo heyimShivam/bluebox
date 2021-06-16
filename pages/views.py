@@ -42,5 +42,6 @@ class WhyChooseUsListView(generics.ListAPIView):
 
 
 class ContactUsInfoListView(generics.ListAPIView):
-    queryset = models.ContactUsInfo.objects.all()
+
     serializer_class = serializers.ContactUsInfoSerializer
+    queryset = models.ContactUsInfo.objects.all()

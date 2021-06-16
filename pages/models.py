@@ -29,6 +29,8 @@ class Testimonial(TimeStampedModel):
 class WhyChooseUs(TimeStampedModel):
     heading = models.CharField(max_length=255)
     content = RichTextField()
+    image = models.ImageField(upload_to="why_us", null=True, blank=True)
+    sort_by = models.IntegerField(null=True, blank=True, unique=True)
 
     def __str__(self):
         return self.heading

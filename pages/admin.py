@@ -5,7 +5,6 @@ from pages import models
 @admin.register(models.WhyChooseUs)
 class WhyChooseUsAdmin(admin.ModelAdmin):
     model = models.WhyChooseUs
-    fields = ["heading", "content"]
     list_display = ("heading", "content",)
     search_fields = ["heading", "content__icontains"]
 

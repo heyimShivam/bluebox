@@ -8,6 +8,12 @@ class RentalSerializer(serializers.ModelSerializer):
         fields = ["id", 'period', 'price', 'sort_by']
 
 
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Location
+        fields = ['title']
+
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
@@ -17,3 +23,15 @@ class ProductSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response['rental'] = RentalSerializer(instance.rental).data
         return response
+
+
+class QuoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Quote
+        fields = "__all__"
+
+
+class NewsletterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Newsletter
+        fields = "__all__"
