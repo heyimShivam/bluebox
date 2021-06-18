@@ -49,3 +49,21 @@ class ProductListView(generics.ListAPIView):
             product_category__title=sub_category,
         )
         return queryset.order_by('rental__price')
+
+
+class LocationListView(generics.ListAPIView):
+    """Get delivery locations"""
+    queryset = models.Location.objects.all()
+    serializer_class = serializers.LocationSerializer
+
+
+class NewsletterCreateView(generics.CreateAPIView):
+    """Create Newsletter"""
+    queryset = models.Newsletter.objects.all()
+    serializer_class = serializers.NewsletterSerializer
+
+
+class QuoteCreateView(generics.CreateAPIView):
+    """Save Free Quote Request"""
+    queryset = models.Quote.objects.all()
+    serializer_class = serializers.QuoteSerializer

@@ -29,3 +29,19 @@ class PolicyListView(generics.ListAPIView):
 class ContactListView(generics.ListAPIView):
     queryset = models.Contact.objects.all()
     serializer_class = serializers.ContactSerializer
+
+
+class TestimonialListView(generics.ListAPIView):
+    queryset = models.Testimonial.objects.all()
+    serializer_class = serializers.TestimonialSerializer
+
+
+class WhyChooseUsListView(generics.ListAPIView):
+    queryset = models.WhyChooseUs.objects.all()
+    serializer_class = serializers.WhyChooseUsSerializer
+
+
+class ContactUsInfoListView(generics.ListAPIView):
+
+    serializer_class = serializers.ContactUsInfoSerializer
+    queryset = models.ContactUsInfo.objects.all()

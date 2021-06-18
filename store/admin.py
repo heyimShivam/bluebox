@@ -42,6 +42,17 @@ class RentalPeriodAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ["title"]
 
 
+@admin.register(models.Quote)
+class QuoteAdmin(admin.ModelAdmin):
+    list_display = ("full_name", "email", "phone", "address", "delivery_date", "created_on",)
+    search_fields = ["full_name", "email", "phone", "address", "delivery_date", "created_on"]
+
+@admin.register(models.Newsletter)
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = ("email", "created_on",)
+    search_fields = ["email","created_on"]
+
+
 admin.site.register(models.HDYFU)
 admin.site.register(models.TimeSlots)
 admin.site.register(models.ExtraWork)
