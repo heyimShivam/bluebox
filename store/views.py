@@ -13,7 +13,7 @@ logger.exception("jhsfjkhsk jhfkjshdkfjhsjfks")
 
 class RentalListView(generics.ListAPIView):
     """Fetch all active rentals list"""
-    queryset = models.RentalPeriod.objects.filter(is_active=True).order_by("sort_by")
+    queryset = models.RentalPeriod.objects.filter(is_active=True)
     serializer_class = serializers.RentalSerializer
 
 
@@ -27,10 +27,11 @@ class BoxPackgeListView(generics.ListAPIView):
         category = self.kwargs['category']
         sub_category = self.kwargs['sub_category']
         rental = self.kwargs['rental']
+        print("self.kwargs", category, sub_category, rental)
         queryset = models.Product.objects.filter(
-            product_category__category__title=category,
-            product_category__title=sub_category,
-            rental__slug=rental
+            product_category__category__title__icontains=category,
+            product_category__title__icontains=sub_category,
+            rental__period=rental
         )
         return queryset.order_by('rental__price')
 

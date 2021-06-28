@@ -27,7 +27,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ItemAdmin(admin.ModelAdmin):
     list_display = ("product_category", "title", "price",)
     search_fields = ["product_category", "title", "unit"]
-    fields = ["product_category", "rental", "title", "price", "unit", "image"]
+    fields = ["product_category", "rental", "title", "price", "unit", "image","description"]
 
 
 @admin.register(models.RentalPeriod)
