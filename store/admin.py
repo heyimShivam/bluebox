@@ -27,7 +27,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ItemAdmin(admin.ModelAdmin):
     list_display = ("product_category", "title", "price",)
     search_fields = ["product_category", "title", "unit"]
-    fields = ["product_category", "rental", "title", "price", "unit", "image"]
+    fields = ["product_category", "rental", "title", "price", "unit", "image", "description"]
 
 
 @admin.register(models.RentalPeriod)
@@ -47,10 +47,17 @@ class QuoteAdmin(admin.ModelAdmin):
     list_display = ("full_name", "email", "phone", "address", "delivery_date", "created_on",)
     search_fields = ["full_name", "email", "phone", "address", "delivery_date", "created_on"]
 
+
 @admin.register(models.Newsletter)
 class NewsletterAdmin(admin.ModelAdmin):
     list_display = ("email", "created_on",)
-    search_fields = ["email","created_on"]
+    search_fields = ["email", "created_on"]
+
+
+@admin.register(models.ZipCode)
+class ZipCodeAdmin(admin.ModelAdmin):
+    list_display = ("code",)
+    search_fields = ["code"]
 
 
 admin.site.register(models.HDYFU)

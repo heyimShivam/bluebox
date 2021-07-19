@@ -9,7 +9,9 @@ urlpatterns = [
     path("locations/", views.LocationListView.as_view()),
     path("quote/", views.QuoteCreateView.as_view()),
     path("news-letter/", views.NewsletterCreateView.as_view()),
-
+    path("check-zipcode/", views.CheckZipCode.as_view()),
+    path("delivery-windows/", views.DeliveryWindowsView.as_view()),
+    path("extra-work/", views.ExtraWorkListView.as_view()),
 
 
 ]

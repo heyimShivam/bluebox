@@ -4,17 +4,30 @@ from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from store import models
 from store import serializers
-
+from rest_framework.views import APIView
+from django.http import Http404
+from rest_framework.response import Response
+from rest_framework import status
 import logging
 logger = logging.getLogger(__name__)
-
-logger.exception("jhsfjkhsk jhfkjshdkfjhsjfks")
 
 
 class RentalListView(generics.ListAPIView):
     """Fetch all active rentals list"""
-    queryset = models.RentalPeriod.objects.filter(is_active=True).order_by("sort_by")
+    queryset = models.RentalPeriod.objects.filter(is_active=True)
     serializer_class = serializers.RentalSerializer
+
+
+class DeliveryWindowsView(generics.ListAPIView):
+    """Fetch all Delivery Window slots """
+    queryset = models.TimeSlots.objects.all()
+    serializer_class = serializers.TimeSlotsSerializer
+
+
+class ExtraWorkListView(generics.ListAPIView):
+    """Fetch ExtraWork options with price """
+    queryset = models.ExtraWork.objects.all()
+    serializer_class = serializers.ExtraWorkSerializer
 
 
 class BoxPackgeListView(generics.ListAPIView):
@@ -27,10 +40,11 @@ class BoxPackgeListView(generics.ListAPIView):
         category = self.kwargs['category']
         sub_category = self.kwargs['sub_category']
         rental = self.kwargs['rental']
+        print("self.kwargs", category, sub_category, rental)
         queryset = models.Product.objects.filter(
-            product_category__category__title=category,
-            product_category__title=sub_category,
-            rental__slug=rental
+            product_category__category__title__icontains=category,
+            product_category__title__icontains=sub_category,
+            rental__period=rental
         )
         return queryset.order_by('rental__price')
 
@@ -67,3 +81,24 @@ class QuoteCreateView(generics.CreateAPIView):
     """Save Free Quote Request"""
     queryset = models.Quote.objects.all()
     serializer_class = serializers.QuoteSerializer
+
+
+class CheckZipCode(APIView):
+    def post(self, reqest):
+        response = {}
+        delivery_zipcode = reqest.data['delivery_zipcode']
+        pickup_zipcode = reqest.data['pickup_zipcode']
+        try:
+            models.ZipCode.objects.get(code=delivery_zipcode)
+        except models.ZipCode.DoesNotExist:
+            response['success'] = False
+            response['message'] = "Sorry! Your delivery zip code is outside of our free service area. Contact us for potential availability and fees."
+            return Response(response)
+        try:
+            models.ZipCode.objects.get(code=pickup_zipcode)
+        except models.ZipCode.DoesNotExist:
+            response['success'] = False
+            response['message'] = "Sorry! Your pickup zip code is outside of our free service area. Contact us for potential availability and fees."
+            return Response(response)
+        response['success'] = True
+        return Response(response, status=status.HTTP_200_OK)
