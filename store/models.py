@@ -173,3 +173,10 @@ class Newsletter(TimeStampedModel):
 
     def __str__(self):
         return self.email
+
+
+class ZipCode(TimeStampedModel):
+    code = models.CharField(max_length=6, unique=True)
+
+    def __str__(self):
+        return self.code

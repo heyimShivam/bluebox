@@ -35,3 +35,15 @@ class NewsletterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Newsletter
         fields = "__all__"
+
+
+class TimeSlotsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TimeSlots
+        fields = ["start_time", "end_time"]
+
+class ExtraWorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ExtraWork
+        fields = ["title", "price"]
+
