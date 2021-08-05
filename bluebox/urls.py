@@ -30,6 +30,8 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('super-admin/', admin.site.urls),
     path("page/", include("pages.urls")),
-    path("store/", include("store.urls"))
+    path("store/", include("store.urls")),
+    path("order/", include("order.urls")),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
