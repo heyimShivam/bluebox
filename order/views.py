@@ -21,34 +21,46 @@ def test_payment(request):
 
 @api_view(['POST'])
 def save_stripe_info(request):
-    data = request.data
-    print("data", data)
-    email = data['email']
-    payment_method_id = data['payment_id']
-    extra_msg = ''  # add new variable to response message
-    # checking if customer with provided email already exists
-    customer_data = stripe.Customer.list(email=email).data
+    try:
+        delivery_data = request.data["delivery"]
+        pickup_data = request.data["pickup"]
+        personal_data = request.data["personal"]
 
-    # if the array is empty it means the email has not been used yet
-    if len(customer_data) == 0:
-        # creating customer
-        customer = stripe.Customer.create(
-            email=email, payment_method=payment_method_id)
-    else:
-        customer = customer_data[0]
-        extra_msg = "Customer already existed."
-    stripe.PaymentIntent.create(
-        customer=customer,
-        payment_method=payment_method_id,
-        currency='usd',  # you can provide any currency you want
-        amount=999,
-        confirm=True,
-        description="testing payment")     # it equals 9.99 PLN
+        payment_data = request.data["payment"]
+        email = payment_data['email']
+        payment_method_id = payment_data['payment_id']
+        extra_msg = ''  # add new variable to response message
+        # checking if customer with provided email already exists
+        customer_data = stripe.Customer.list(email=email).data
 
-    return Response(status=status.HTTP_200_OK,
-                    data={
-                        "success": True,
-                        'message': 'Success',
-                        'data': {
-                            'customer_id': customer.id, 'extra_msg': extra_msg}
-                    })
+        # if the array is empty it means the email has not been used yet
+        if len(customer_data) == 0:
+            # creating customer
+            customer = stripe.Customer.create(
+                email=email, payment_method=payment_method_id)
+        else:
+            customer = customer_data[0]
+            extra_msg = "Customer already existed."
+        stripe.PaymentIntent.create(
+            customer=customer,
+            payment_method=payment_method_id,
+            currency='usd',  # you can provide any currency you want
+            amount=999,
+            confirm=True,
+            description="testing payment")     # it equals 9.99 USD
+
+        return Response(status=status.HTTP_200_OK,
+                        data={
+                            "success": True,
+                            'message': 'Success',
+                            #     'data': {
+                            #         'customer_id': customer.id, 'extra_msg': extra_msg}
+                        })
+    except Execption as error:
+        raise error
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                        data={
+                            "success": False,
+                            'message': 'Payment failed!',
+                            'error': str(error)
+                        })
