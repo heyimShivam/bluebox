@@ -1,0 +1,42 @@
+AWS 
+
+rowwattechnologies@gmail.com
+RowwatIsGreat!@3
+RowwatersareRR!@3
+
+server:
+IP: 3.142.90.163
+Pwd: pem key
+username: ubuntu
+
+
+Project Path in Filezila:
+/home/project
+
+
+admin:
+Username:  bb-admin
+Pwd: admin@123
+
+
+nohup bash -c 'npm start' &
+
+
+4010 Moorpark Avenue, Suite 206, San Jose,CA 95117
+
+
+
+Frontend: http://3.142.90.163:3000/
+
+Backend: http://3.142.90.163:8000/super-admin
+
+Admin Details
+Url: http://3.142.90.163:8000/super-admin/
+Username:  bb-admin
+Pwd: admin@123
+
+
+
+
+
+
