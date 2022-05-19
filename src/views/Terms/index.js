@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import SimpleReactValidator from "simple-react-validator";
-import { useHistory } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
+import React from "react";
+// import SimpleReactValidator from "simple-react-validator";
+// import { useHistory } from "react-router-dom";
+// import { useToasts } from "react-toast-notifications";
 
-export default function index() {
+export default function index(props) {
+    props.setFooteroffice(true);
+    props.setshowHideFooter(false);
     return (
         <>
             <link rel="stylesheet" type="text/css" href="../../public/style/style.css" />

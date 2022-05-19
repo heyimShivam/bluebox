@@ -10,6 +10,7 @@ import Step5 from "./Step5";
 import Step6 from "./Step6";
 import Orderpreview from "./Orderpreview"
 import Cart from "./Cart";
+import Payment from "../../payment/index"
 
 ReactSession.setStoreType("localStorage");
 
@@ -29,10 +30,11 @@ export default function MasterForm(props) {
   // const [total, setTotal] = React.useState([]);
   // const [rentalid, setRentalId] = React.useState("be7f2421-2168-45ce-ab4e-d5ed5f68ab69");
 
-  const [select_rental, setSelectedRental] = React.useState('2 Week');
+  const [select_rental, setSelectedRental] = React.useState('2 Weeks');
   const [loading, setLoading] = React.useState(false);
   const [spinner, setSpinner] = React.useState(false);
   const [mainloader, setMainloader] = React.useState(false);
+  const [previewloader, setPreviewloader] = React.useState(false);
   const [getDiscountprice, setDiscountprice] = React.useState([0]);
   const [getStairevevators, setStairevevators] = React.useState([0]);
   const [getPickupdate, setPickupdate] = React.useState([""]);
@@ -240,6 +242,8 @@ export default function MasterForm(props) {
                 address={props.address}
                 setAddress={props.setAddress}
                 card={props.card}
+                setPreviewloader={setPreviewloader}
+                previewloader={previewloader}
                 setCard={props.setCard}
                 orderid={props.orderid}
                 setOrderid={props.setOrderid}
@@ -268,6 +272,8 @@ export default function MasterForm(props) {
                 rentalid={props.rentalid}
                 loading={loading}
                 setLoading={setLoading}
+                setPreviewloader={setPreviewloader}
+                previewloader={previewloader}
                 getDiscountprice={getDiscountprice}
                 setDiscountprice={setDiscountprice}
                 setStairevevators={setStairevevators}
@@ -341,6 +347,7 @@ export default function MasterForm(props) {
               card={props.card}
               setCard={props.setCard}
             />
+          
 
           </div>
         </div>

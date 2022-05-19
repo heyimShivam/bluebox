@@ -6,8 +6,8 @@ export default function SimpleSlider(testimonials) {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToShow: 2,
+    slidesToScroll: 2,
   };
 
   return (
@@ -38,10 +38,10 @@ export default function SimpleSlider(testimonials) {
                   sjh kjhfjsdfkj sdjfs d9809809          989 8fk ff s ff f  shsdfhk sd fj ss sd fsdkfhsdfhks df g gd 
                 </ReadMoreAndLess> */}
                 <div className="row">
-                  <div className="col-4">
+                  <div className="col-3">
                     <img src={obj.image} className="img-fluid" alt="" />
                   </div>
-                  <div className="col-8 pl-0">
+                  <div className="col-9 pl-0">
                     <p className="fs-13 font-weight-bold mb-0">{obj.name}</p>
                     <p className="fs-13">{obj.occupation}</p>
                   </div>

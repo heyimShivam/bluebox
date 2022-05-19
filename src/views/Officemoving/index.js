@@ -1,11 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
-import SimpleReactValidator from "simple-react-validator";
-import { rentalsPeriods, getBoxPackages, getPackage } from "../../data/API";
+import React, { useState } from "react";
+import ZipCode from "../Home/ZipModal";
+import { getPackage } from "../../data/API";
 
 export default function Index(props) {
+
     props.setFooteroffice(true);
     props.setshowHideFooter(false);
-    // console.log(props.showFooteroffice)
+
+     const [openZipModal, setZipModal] = React.useState(false);
+
+    const hideZipM = () => {
+        setZipModal(false);
+    };
+
+    const showZipModal = () => {
+        setZipModal(true);
+    };
 
     const [rentals, setRentalList] = useState([]);
     const [products1, setProducts1] = useState([]);
@@ -14,6 +24,8 @@ export default function Index(props) {
     const [rental4, setRental4] = useState([]);
     const [rental5, setRental5] = useState([]);
     const [rental6, setRental6] = useState([]);
+    
+    const [toggleModal, setToggleModal] = useState(true);
 
 
     async function getrentalprice(id) {
@@ -40,50 +52,30 @@ export default function Index(props) {
             })
     }
 
-    const getRentals = () => {
-
-        rentalsPeriods()
-            .then((res) => {
-                setRentalList(res?.data);
-
-                res?.data.results?.map((obj) => {
-                    console.log(obj.sort_by);
-                    if (obj.sort_by > 1) {
-                        getrentalprice(obj.sort_by);
-                    }
-
-                })
-
-            })
-            .catch((e) => console.log(e));
-    };
-
-    const getBoxProducts = () => {
-
-        getBoxPackages("Office", "Box Packges", "1")
-            .then((res) => {
-                setProducts1(res?.data);
-            })
-            .catch((e) => console.log(e));
-    };
-
+    
     
     React.useEffect((props) => {
-        getRentals();
-        getBoxProducts();
+        // getRentals();
+        // getBoxProducts();
         
 
     }, []);
-
+    function toggleModalFunction(argu) {
+        setToggleModal(argu);   
+    }
     return (
         <>
+          <ZipCode showModal={openZipModal} hideModal={hideZipM}
+          toggleModal={toggleModal}
+          toggleModalFunction={toggleModalFunction} />
             <section class="hero move-office position-relative">
                 <div class="container">
                     <div class="text-center">
                         <h1 class="text-white" data-aos="fade-down" data-aos-delay="0" data-aos-duration="1000">
-                            Why Rent <span class="font-weight-bold">Moving <span class="text-primary">Boxes</span></span>
+                             <span class="font-weight-bold">Office Moving Box Rentals</span>
                         </h1>
-                        <button class="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000">Order Now</button>
+                        <button className="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400"
+                            data-aos-duration="1000" onClick={() => {showZipModal(); setToggleModal(true)}} >Order Now</button>
                     </div>
                 </div>
             </section>
@@ -92,15 +84,15 @@ export default function Index(props) {
                     <div class ="moving_office_main">
                          <div class ="row">
                                 <div class ="col-md-4">
-                                    <img src="img/delivery-truck.png"/>
+                                    <img src="img/delivery-truck.png" alt=""/>
                                     <p>Fewer manpower hours required<br/> and less moving trucks<br/> needed</p>
                                 </div>
                                 <div class ="col-md-4">
-                                        <img src="img/productivity.png"/>
+                                        <img src="img/productivity.png" alt=""/>
                                         <p>Reduce employee downtime<br/> increasing productivity</p>
                                 </div>
                                 <div class ="col-md-4">
-                                        <img src="img/corporate.png"/>
+                                        <img src="img/corporate.png" alt=""/>
                                         <p>Sustainable moves boost <br/>corporate image</p>
                                 </div>
                         </div>
@@ -114,7 +106,7 @@ export default function Index(props) {
                             <p>Do you have an upcoming San Francisco Bay Area office move on the calendar? BlueBox moving boxes are the perfect solution for your business relocation needs. Reduce unproductive downtime by removing the need for employees to build cardboard boxes, while eliminating all that cardboard waste. BlueBox offers a zero-waste office moving solution perfect for retail stores, medical offices, venture-funded startups and everything in between. No matter your business, we have a solution for your company.</p>
 
                             <p>BlueBox enables sustainable, low-stress office moves within the San Francisco Bay Area by providing clean, eco-friendly, reusable moving boxes delivered to your current office. Boxes are easy to pack and neatly stack on top of one another when full and nest within one another when empty — helping you save valuable office space. Stack boxes 3 - 4 high then wheel them through the office out to the truck using our custom fit 4-wheel dollies. Once you’ve completed your move and your office is done unpacking, we will come pick up all the supplies. No dump, no dumpsters, no cardboard waste!</p>
-                            <img src="img/productimg2.png" />
+                            <img src="img/box.png" alt="" />
                         </div>
                     </div>
                 </div>

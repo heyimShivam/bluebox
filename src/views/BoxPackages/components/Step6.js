@@ -3,9 +3,9 @@ import SimpleReactValidator from "simple-react-validator";
 import PaymentApp from "../../payment";
 import { ReactSession } from 'react-client-session';
 import { getCoupon, getTotal, getHdyfu } from "../../../data/API";
+import Previewloader from "./Previewloader";
 
 export default function Step6(props) {
-  // console.log(props);
   const [, forceUpdate] = React.useState();
   const [hdyfu, sethdyfu] = useState([]);
 
@@ -28,6 +28,7 @@ export default function Step6(props) {
   const [errorMsg2, setMsg2] = React.useState("");
 
   const handleChange = (event) => {
+    // console.log(event.target.value)
     setPersonalDetails({
       ...personal, [event.target.name]: event.target.value,
     });
@@ -121,7 +122,7 @@ export default function Step6(props) {
     }
     else {
       setError(true)
-      setMsg2("Please enter all details then you applie coupon")
+      setMsg2("Please enter all details then you apply coupon")
     }
 
 
@@ -142,11 +143,12 @@ export default function Step6(props) {
 
   return (
     <>
+      {/* {props.previewloader ? <Previewloader /> : " "} */}
       {/* {ReactSession.get('session')} */}
       {/* { localStorage.getItem('session') } */}
       <div className="step6" id="step6">
         <h2 className="bg-primary text-white text-center py-2">
-          Step 6: Personal Detail And Payment
+          Step 6: Personal and Payment Details
         </h2>
         <div className="row">
           <div className="container px-5 my-4">
@@ -210,7 +212,7 @@ export default function Step6(props) {
                   )}
                 </div>
                 <div className="col-md-6 mt-3">
-                  <label>Phone Number *</label>
+                  <label>Mobile Number *<span className="detailsnote"> (Notifications will be sent to this number)</span></label>
                   <input
                     type="text"
                     id="phone_number"
@@ -238,28 +240,30 @@ export default function Step6(props) {
                     onChange={(e) => handleChange(e)}
                   />
                 </div>
-                <div className="col-md-6 mt-3">
-                  <label>Company Name (Office Orders Only)</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="doe.pvt.lmt"
-                    name="company_name"
-                    value={personal.company_name}
-                    onChange={(e) => handleChange(e)}
-                  />
+                {localStorage.getItem("tab") == "Office" ?
+                  <div className="col-md-6 mt-3">
+                    <label>Company Name (Office Orders Only)</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="doe.pvt.lmt"
+                      name="company_name"
+                      value={personal.company_name}
+                      onChange={(e) => handleChange(e)}
+                    />
 
-                  {validator.current.message(
-                    "company_name",
-                    personal.company_name,
-                    "required",
-                    { className: "text-danger" }
-                  )}
-                </div>
+                    {validator.current.message(
+                      "company_name",
+                      personal.company_name,
+                      "required",
+                      { className: "text-danger" }
+                    )}
+                  </div>
+                  : ""}
                 <div className="col-md-6 mt-3">
                   <div className="buttonIn">
 
-                    <label>Got a voucher code?</label>
+                    <label>If you have a coupon code, enter it below</label>
                     <input
                       type="text"
                       className="form-control"
@@ -268,7 +272,7 @@ export default function Step6(props) {
                       autoComplete="off"
                       // maxLength="6"
                       value={personal.voucher_code}
-                    onChange={(e) => handleChange(e, props)}
+                      onChange={(e) => handleChange(e, props)}
                     />
                     {/* <button id="clear"  onClick={(e) => codeApply(e)}  >Apply</button> */}
                     {/* <button className="btn btn-dark couponbtn" onClick={(e) => handleChange(e, props)} >
@@ -280,7 +284,7 @@ export default function Step6(props) {
                 </div>
 
                 <div className="col-md-6 mt-3">
-                  <label>How did you find us? *</label>
+                  <label>How did you hear about us? *</label>
                   {/* <input
                     className="form-control"
                     name="hdyfu"
@@ -313,7 +317,9 @@ export default function Step6(props) {
 
               <h5 style={{ marginTop: "20px" }}>Enter Payment Details</h5>
               <hr />
+
               <PaymentApp
+
                 delivery_detail={delivery_detail}
                 pickup_detail={pickup_detail}
                 personal={personal}
@@ -326,6 +332,8 @@ export default function Step6(props) {
                 setOrderid={setOrderid}
                 details={details}
                 setDetails={setDetails}
+                setPreviewloader={props.setPreviewloader}
+                previewloader={props.previewloader}
                 pickupdetails={pickupdetails}
                 setPickupdetails={setPickupdetails}
                 personaldetails={personaldetails}

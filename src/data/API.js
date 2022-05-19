@@ -25,6 +25,11 @@ export async function getLocations() {
   return await instance.get(`/store/locations/`);
 }
 
+// get footer data
+export async function getFooter() {
+  return await instance.get(`/page/contactus-info/`);
+}
+
 export async function saveQuote(data) {
   return await instance.post(`/store/quote/`, data);
 }
@@ -61,9 +66,6 @@ export async function getExtraWork() {
 }
 
 export async function placeOrder(data) {
-  // console.log("this is sent to stripe info api");
-  // console.log(data);
-  // console.log("this is sent to stripe info api end");
   return await instance.post(`/order/save-stripe-info/`, data);
 }
 
@@ -97,7 +99,7 @@ export async function getnewRental(data)
 export async function getTotal(session){
   return await instance.get(`order/total/?session=${session}`)
 }
-//clear cart
+// clear cart
 export async function clearCart(session){
   return await instance.get(`order/clear_cart/?session=${session}`)
 }

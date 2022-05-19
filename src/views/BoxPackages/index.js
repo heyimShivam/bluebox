@@ -3,6 +3,8 @@ import MasterForm from "./components/MasterForm";
 import { getBoxPackages, getTotalCart, clearCart } from "../../data/API";
 import Tabs from "./components/Tabs";
 import uuid from 'react-uuid'
+import Footer from "../../views/layout/Footer";
+import Innerfooter from "../../views/layout/Footer-inne"
 import { ReactSession } from 'react-client-session';
 
 ReactSession.setStoreType("localStorage");
@@ -16,9 +18,9 @@ if (ReactSession.get('session')) {
 }
 
 export default function MovingBox(props) {
-  props.setShowHideHeader(false);
-  props.setshowHideFooter(false);
-  props.setshowHideinnerFooter(true);
+  props.setShowHideHeader(true);
+  props.setshowHideFooter(true);
+  props.setshowHideinnerFooter(false);
 
   const [box, setBox] = React.useState({});
   const [packings, setPackings] = React.useState([]);
@@ -26,26 +28,26 @@ export default function MovingBox(props) {
   const [total, setTotal] = React.useState([]);
   // const [total, setTotal] = React.useState([]);
   const [header, setHeader] = React.useState(true);
-  const [rentalid, setRentalId] = React.useState("be7f2421-2168-45ce-ab4e-d5ed5f68ab69");
+  const [rentalid, setRentalId] = React.useState("781ce70c-ba18-46b1-b585-57dda9f3c778");
   const [getDeliverydate, setDeliverydate] = React.useState([""]);
 
-  
+
   const [category, setCategory] = useState("Home");
   const [products, setProducts] = useState([]);
-  const [sub_category, setSubCate] = useState("Box Packges");
-  const [select_rental, setSelectedRental] = React.useState('2 Week');
+  const [sub_category, setSubCate] = useState("Box Packages");
+  const [select_rental, setSelectedRental] = React.useState('2 Weeks');
   const [active, setActive] = React.useState('');
-  const [delivetslot1,setDelivetslot1] = React.useState([]);
-  const [delivetslot2,setDelivetslot2] = React.useState([]);
-  const [pickupslot1,setPickupslot1] = React.useState([]);
-  const [pickupslot2,setPickupslot2] = React.useState([]);
+  const [delivetslot1, setDelivetslot1] = React.useState([]);
+  const [delivetslot2, setDelivetslot2] = React.useState([]);
+  const [pickupslot1, setPickupslot1] = React.useState([]);
+  const [pickupslot2, setPickupslot2] = React.useState([]);
   const [tax, setTax] = React.useState('');
   const [card, setCard] = React.useState('');
   const [orderid, setOrderid] = React.useState('');
   // const [getNewAddress, setNewAddress] = React.useState([]);
 
-  const [address, setAddress] = React.useState({  
-    city: "", 
+  const [address, setAddress] = React.useState({
+    city: "",
     country: "",
     line1: "",
     line2: "",
@@ -65,60 +67,71 @@ export default function MovingBox(props) {
       document.getElementById("homebtn").classList.add("active");
 
     }
-    localStorage.setItem("tab",newcat)
+    localStorage.setItem("tab", newcat)
 
     setActive(localStorage.getItem("tab"));
     setCategory(localStorage.getItem("tab"));
-    
-    getBoxPackages(newcat, "Box Packges", '2 Week')
-    .then((res) => {
-      clearCart(ReactSession.get('session'));
-      setBox("");
-      setProducts(res?.data);
-    })
-    .catch((e) => console.log(e));
+
+    getBoxPackages(newcat, "Box Packages", '2 Weeks')
+      .then((res) => {
+        clearCart(ReactSession.get('session'));
+        setBox("");
+        setProducts(res?.data);
+      })
+      .catch((e) => console.log(e));
     //wait
-    };
+  };
 
   const setDefaultValue = () => {
-      if(localStorage.getItem("tab") != ""){
-      var tabbutton =localStorage.getItem("tab");
+    if (localStorage.getItem("tab") != "") {
+      var tabbutton = localStorage.getItem("tab");
     }
-  
-    setTimeout(function() {
-        if( tabbutton == 'Office') {
-          
-          setActive('Office');
-          getBoxPackages(localStorage.getItem("tab"), "Box Packges", '2 Week')
+
+    setTimeout(function () {
+      // if (localStorage.getItem('setShowHideHeader')) {
+      //   props.setShowHideHeader(localStorage.getItem('setShowHideHeader'));
+      // }
+      // if (localStorage.getItem('setshowHideFooter')) {
+      //   props.setshowHideFooter(localStorage.getItem('setshowHideFooter'));
+      // }
+      // if (localStorage.getItem('setshowHideinnerFooter')) {
+      //   props.setshowHideinnerFooter(localStorage.getItem('setshowHideinnerFooter'));
+      // }
+
+
+      if (tabbutton == 'Office') {
+
+        setActive('Office');
+        getBoxPackages(localStorage.getItem("tab"), "Box Packages", '2 Weeks')
           .then((res) => {
-          setProducts(res?.data);
+            setProducts(res?.data);
           })
           .catch((e) => console.log(e));
-          // setnewcategory('Office');
-        } 
-        else {
-          // alert("2")
-          setActive('Home');
-          getBoxPackages(localStorage.getItem("tab"), "Box Packges", '2 Week')
+        // setnewcategory('Office');
+      }
+      else {
+        // alert("2")
+        setActive('Home');
+        getBoxPackages(localStorage.getItem("tab"), "Box Packages", '2 Weeks')
           .then((res) => {
-           setProducts(res?.data);
+            setProducts(res?.data);
           })
           .catch((e) => console.log(e));
-          // setnewcategory('Home');
-        }
-    },1000)
-    
-        
+        // setnewcategory('Home');
+      }
+    }, 1000)
+
+
   }
   React.useEffect(() => {
     setDefaultValue();
-   
+
   }, [])
 
   return (
     <>
       <Tabs />
-      <section className="show_btn">
+      <section className="show_btn" id="show_btn" >
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -126,8 +139,8 @@ export default function MovingBox(props) {
               <p>All packages include everything you need for an easy, stress-free move.</p>
             </div>
             <div className="col-md-12">
-              <button className={`rounded-right ${(active=='Home')?'active':''} homebtn`} id="homebtn" value="Home" onClick={(e) => setnewcategory('Home')} >HOME</button>
-              <button className={`rounded-left ${(active=='Office')?'active':''} officebtn`} id="officebtn" value="Office" onClick={(e) => setnewcategory('Office')}>OFFICE</button>
+              <button className={`rounded-right ${(active == 'Home') ? 'active' : ''} homebtn`} id="homebtn" value="Home" onClick={(e) => setnewcategory('Home')} >HOME</button>
+              <button className={`rounded-left ${(active == 'Office') ? 'active' : ''} officebtn`} id="officebtn" value="Office" onClick={(e) => setnewcategory('Office')}>OFFICE</button>
             </div>
 
           </div>
@@ -174,11 +187,10 @@ export default function MovingBox(props) {
         setCard={setCard}
         orderid={orderid}
         setOrderid={setOrderid}
-        // getNewAddress={getNewAddress}
-        // setNewAddress={setNewAddress}
+      // getNewAddress={getNewAddress}
+      // setNewAddress={setNewAddress}
 
       />
-
     </>
   );
 }

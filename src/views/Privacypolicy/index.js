@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import SimpleReactValidator from "simple-react-validator";
-import { useHistory } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
+import React from "react";
+// import SimpleReactValidator from "simple-react-validator";
+// import { useHistory } from "react-router-dom";
+// import { useToasts } from "react-toast-notifications";
 
-export default function index() {
-
+export default function index(props) {
+    props.setFooteroffice(true);
+    props.setshowHideFooter(false);
     return (
         <>
             <link rel="stylesheet" type="text/css" href="../../public/style/style.css" />
@@ -68,15 +69,15 @@ export default function index() {
                         <h2><strong>BEHAVIOURAL ADVERTISING</strong></h2>
                         <p>
                             As described above, we use your Personal Information to provide you with targeted advertisements or marketing communications we believe may be of interest to you. For more information about how targeted advertising works, you can visit the Network Advertising Initiative’s (“NAI”) educational page at: 
-                            <a href="http://www.networkadvertising.org/understanding-online-advertising/how-does-it-work" target="_blank">http://www.networkadvertising.org/understanding-online-advertising/how-does-it-work.<br /></a></p>
+                            <a href="http://www.networkadvertising.org/understanding-online-advertising/how-does-it-work" target="_blank" rel="noopener noreferrer" >http://www.networkadvertising.org/understanding-online-advertising/how-does-it-work.<br /></a></p>
                             
                             <p>
                             <div className="spacer20"></div>
                                 You can opt out of targeted advertising by visiting the following links:<br/>
-                                <b>FACEBOOK</b> - <a href="https://www.facebook.com/settings/?tab=ads" target="_blank"> https://www.facebook.com/settings/?tab=ads<br/></a>
-                                <b>GOOGLE</b> - <a href="https://www.google.com/settings/ads/anonymous" target="_blank">https://www.google.com/settings/ads/anonymous<br/></a>
-                                <b>BING</b> - <a href="https://advertise.bingads.microsoft.com/en-us/resources/policies/personalized-ads" target="_blank">https://advertise.bingads.microsoft.com/en-us/resources/policies/personalized-ads<br/></a>
-                                Additionally, you can opt out of some of these services by visiting the Digital Advertising Alliance’s opt-out portal at: <a href="http://optout.aboutads.info/" target="_blank" > http://optout.aboutads.info/.</a>
+                                <b>FACEBOOK</b> - <a href="https://www.facebook.com/settings/?tab=ads" target="_blank" rel="noopener noreferrer"> https://www.facebook.com/settings/?tab=ads<br/></a>
+                                <b>GOOGLE</b> - <a href="https://www.google.com/settings/ads/anonymous" target="_blank" rel="noopener noreferrer">https://www.google.com/settings/ads/anonymous<br/></a>
+                                <b>BING</b> - <a href="https://advertise.bingads.microsoft.com/en-us/resources/policies/personalized-ads" target="_blank" rel="noopener noreferrer">https://advertise.bingads.microsoft.com/en-us/resources/policies/personalized-ads<br/></a>
+                                Additionally, you can opt out of some of these services by visiting the Digital Advertising Alliance’s opt-out portal at: <a href="http://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" > http://optout.aboutads.info/.</a>
                             </p>
                             <div className="spacer30"></div>
                         <h2><strong> DO NOT TRACK </strong></h2>

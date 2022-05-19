@@ -3,7 +3,9 @@ import SimpleReactValidator from "simple-react-validator";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 
-export default function index() {
+export default function index(props) {
+    props.setFooteroffice(true);
+    props.setshowHideFooter(false);
     return (
         <>
             <section className="hero move-hero-about position-relative ">
@@ -16,19 +18,22 @@ export default function index() {
                         <button className="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000"  >Order Now</button>
                     </div> */}
                       <div class ="about_icon">
-                          <p>PRODUCONG ONE TON OF CARDBOARD REQUIRES</p>
+                          <h1>PRODUCING ONE TON OF CARDBOARD REQUIRED</h1>
                       <div class ="row">
                                 <div class ="col-md-4">
                                     <img src="img/trees.png"/>
-                                    <p>17<br/> trees</p>
+                                    <h4>17</h4> <p>Trees</p>
                                 </div>
                                 <div class ="col-md-4">
                                         <img src="img/oil.png"/>
-                                        <p>79<br/> gallons<br/>of oil</p>
+                                        <h4>79</h4> <p>Gallon<br/>of Oil</p>
                                 </div>
                                 <div class ="col-md-4">
                                         <img src="img/water.png"/>
-                                        <p>7000<br/>galoons of <br/> water</p>
+                                        <h4>7000</h4><p>Gallon of <br/> Water</p>
+                                </div>
+                                <div className="aftricn">
+                                    <p>In the US, over 17,000 tons of cardboard end up in landfills each year</p>
                                 </div>
                         </div>
                         </div>

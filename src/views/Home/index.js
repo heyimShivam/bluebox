@@ -3,6 +3,7 @@ import SimpleReactValidator from "simple-react-validator";
 import { useHistory } from "react-router-dom";
 import ZipCode from "./ZipModal";
 import $ from 'jquery';
+// import { useRef } from "react"; 
 
 import {
   getHomeData,
@@ -26,7 +27,7 @@ export default function Home() {
   const [why_us, setWhyUs] = useState([]);
   const [contact_info, setContactInfo] = useState([]);
   const [locations, setLocation] = useState([]);
-  const history = useHistory();
+  // const history = useHistory();
   const [zipcode, setZipcode] = useState([]);
   const { addToast } = useToasts();
   // Free Quote Request states
@@ -54,7 +55,7 @@ export default function Home() {
     if (validator.current.allValid()) {
       saveQuote(values)
         .then((res) => {
-          addToast("Saved Successfully", {
+          addToast("Message sent successfully", {
             appearance: "success",
             autoDismiss: true,
           });
@@ -107,12 +108,12 @@ export default function Home() {
     callApi();
     if (zipcode == "") {
       setZipcode(false);
-      console.log(setZipcode)
+      // console.log(setZipcode)
     }
 
   }, []);
   const [showM, setModal] = React.useState(false);
-
+  const [toggleModal, setToggleModal] = React.useState(false);
   const hideZModal = () => {
     setModal(false);
   };
@@ -120,30 +121,37 @@ export default function Home() {
   const showZModal = () => {
     setModal(true);
   };
+  function toggleModalFunction(argu) {
+    setToggleModal(argu);   
+}
+
+  const ref = useRef();
   return (
     <>
       <ZipCode
+      showModal={toggleModal}
+      hideModal={true}
         zipcode={zipcode}
         setZipcode={setZipcode}
+        toggleModal={toggleModal}
+        toggleModalFunction={toggleModalFunction}
       />
       {/* <!-- hero --> */}
       <section className="hero position-relative">
         <div className="container">
           <div className="row">
-            <div className="col-md-6 position-relative">
+            <div className="col-md-6 position-relative home-banner">
               <h1
-                className="mb-0 font-weight-bold"
+                className="mb-0 font-weight-bold banner-text"
                 data-aos="fade-right"
                 data-aos-delay="500"
                 data-aos-duration="1000"
               >
-                we rent eco-friendly, reusable
-                <span className="text-primary"> moving boxes </span>delivered to
-                your <span className="text-primary">home or office</span>
+                     We Rent Eco-Friendly<br />Moving Boxes Delivered to <br /> Your Home or Office
               </h1>
-              <div className="btns mt-4 col-md-9">
-                <div className="row">
-                  <div className="col-6 px-2">
+              <div className="btns mt-4">
+                <div className="row d-flex justify-content-center" style={{width: '100%', padding: 0, margin: 0}}>
+                  <div className="">
                     <button
                       className="btn btn-primary w-100 d-block"
                       // data-toggle="modal"
@@ -151,15 +159,15 @@ export default function Home() {
                       data-aos="fade-up"
                       data-aos-delay="800"
                       data-aos-duration="1000"
-                      onClick={() => showZModal()}
+                      onClick={() => {showZModal(); setToggleModal(true);}}
                     >
-                      ORDER NOW
+                      Start Your Order
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <img
                 src="img/help.png"
                 className="img-fluid position-absolute"
@@ -167,11 +175,11 @@ export default function Home() {
                 data-aos-duration="1500"
                 alt="somethinghelping Men"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
-      {/* <!-- hero --> */}
+      {/* <!-- hero --> */}s
       {/* <!-- Modal --> */}
       <ZipCode showModal={showM} hideModal={hideZModal} />
       {/* <div
@@ -264,24 +272,24 @@ export default function Home() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-12">
-              <h1>How it Works?</h1>
+              <h1>How it Works</h1>
             </div>
-            <div className="col-md-3 p-0 py-2" data-aos="fade-right" data-aos-delay="0" data-aos-duration="1000">
+            <div className="col-md-3 p-0 py-2 howitwork" data-aos="fade-right" data-aos-delay="0" data-aos-duration="1000">
               <img src="img/order-online.gif" className="oneImg img-fluid" alt="something" />
               <h3>Order boxes</h3>
               <p className="text">Select from any of our moving box packages and order moving supplies, if needed.</p>
             </div>
-            <div className="col-md-3 p-0 py-2" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000">
+            <div className="col-md-3 p-0 py-2 howitwork" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000">
               <img src="img/we-deliver.gif" className="twoImg img-fluid" alt="something" />
               <h3>We deliver</h3>
               <p className="text">We'll provide free delivery of our clean, sanitized plastic moving boxes</p>
             </div>
-            <div className="col-md-3 p-0 py-2" data-aos="fade-right" data-aos-delay="600" data-aos-duration="1000">
+            <div className="col-md-3 p-0 py-2 howitwork" data-aos="fade-right" data-aos-delay="600" data-aos-duration="1000">
               <img src="img/you-pack-and-move.gif" className="threeImg img-fluid" alt="something" />
               <h3>You pack and move</h3>
               <p className="text">Pack the boxes, hire movers and move into your new home or office</p>
             </div>
-            <div className="col-md-3 p-0 py-2" data-aos="fade-right" data-aos-delay="900" data-aos-duration="1000">
+            <div className="col-md-3 p-0 py-2 howitwork" data-aos="fade-right" data-aos-delay="900" data-aos-duration="1000">
               <img src="img/we-pickup.gif" className="fourImg img-fluid" alt="something" />
               <h3>We pick up</h3>
               <p className="text">Once you're done unpacking and settled in, we'll visit to pickup the boxes</p>
@@ -305,42 +313,32 @@ export default function Home() {
                         <div className="col-md-4">
                             <img src="img/homepageicons-01.png"/>
                             <h4>Free Delivery & Pick Up</h4>
-                            <p>We provide free delivery and pick up of
-                            our moving poxes throughout the San
-                            Francisco Bay Area and beyond</p>
+                            <p>We provide free delivery and pick up of our moving boxes throughout the San Francisco Bay Area and beyond</p>
                         </div>
                         <div className="col-md-4">
                             <img src="img/homepageicons-02.png"/>
                             <h4>Timed Deliveries</h4>
-                            <p>We offer timed delveries to ensure
-                            boxes arrive when you need.then</p>
+                            <p>We offer timed deliveries to ensure boxes arrive when you need them</p>
                         </div>
                         <div className="col-md-4">
                             <img src="img/homepageicons-03.png"/>
-                            <h4>NextDay delivery</h4>
-                            <p>Need boxes in a hurry? We
-                            offer nex dav delivery,Jus
-                            order by 3 PM the dav before</p>
+                            <h4>Next-Day Delivery</h4>
+                            <p>Need boxes in a hurry? We offer next-day delivery. Just order by 3 PM the day before</p>
                         </div>
                         <div className="col-md-4">
                             <img src="img/homepageicons-04.png"/>
                             <h4>Moving Supplies</h4>
-                            <p>Additional moving supplies
-                            available to ensure you can get
-                            packing as soon as boxes</p>
+                            <p> We sell moving supplies to help you get packing as soon as boxes arrive</p>
                         </div>
                         <div className="col-md-4">
                             <img src="img/homepageicons-05.png"/>
                             <h4>Earth Friendly</h4>
-                            <p>Using reusble boxes saves trees and
-                            keeps cardboard out of landfills.
-                            No numos no dumpsters nO waG</p>
+                            <p>Using reusable boxes saves trees and keeps cardboard out of landfills. No dumps, no dumpsters, no waste</p>
                         </div>
                         <div className="col-md-4">
                             <img src="img/homepageicons-06.png"/>
                             <h4>Stress Free</h4>
-                            <p>Moving can be stressful, Packing
-                            doesn't have to be. Pack happy!</p>
+                            <p>Moving can be stressful. Packing doesn’t have to be. Pack happy!</p>
                         </div>
                     </div>
                 </div>
@@ -356,8 +354,13 @@ export default function Home() {
             <div className="cardbox">
                 <div className="row">
                     <div className="col-md-12">
-                        <img src="img/productimg1.png"/>
+                        <img src="img/newproduct_img.jpeg"/>
                     </div>
+                    <div id="mydiv">
+                          {/* <img src="img/newproduct_img.jpeg" class="image_full"/> */}
+                          <img src="img/productmobile1.png"  class="image_mobile"/>
+                          <img src="img/productmobile2.png"  class="image_mobile"/>
+                      </div>
                 </div>
             </div>
         </div>
@@ -440,7 +443,7 @@ export default function Home() {
                         {validator.current.message(
                           "full_name",
                           values.full_name,
-                          "required|alpha",
+                          "required",
                           { className: "text-danger" }
                         )}
                       </div>
@@ -480,21 +483,24 @@ export default function Home() {
                         <input
                           type="text"
                           className="form-control fs-12 my-1"
-                          placeholder="Where Do You Live"
-                          name="address"
-                          value={values.address}
+                          placeholder="City/Zip code"
+                          name="zipcode"
+                          value={values.zipcode}
                           onChange={(e) => handleChange(e)}
                         />
                         {validator.current.message(
-                          "address",
-                          values.address,
+                          "zipcode",
+                          values.zipcode,
                           "required",
                           { className: "text-danger" }
                         )}
                       </div>
                       <div className="col-lg-6 p-1">
                         <input
-                          type="date"
+                          type="text"
+                          ref={ref}
+                          onFocus={() => (ref.current.type = "date")}
+                          onBlur={() => (ref.current.type = "text")}
                           className="form-control fs-12 my-1"
                           placeholder="Delivery Date"
                           name="delivery_date"

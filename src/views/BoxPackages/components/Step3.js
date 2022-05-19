@@ -21,6 +21,8 @@ function step3BackBtn() {
   document.getElementById("step2").style.display = "block";
   document.getElementById("st3").classList.remove("active");
   document.getElementById("st2").classList.add("active");
+  document.getElementById("st2li").classList.add("current");  
+
   document.getElementById("st3li").classList.remove("current");
   document.getElementById("st2li").classList.remove("complete");
 }
@@ -45,7 +47,7 @@ export default function Step3(props) {
           product: newItem.id,
           quantity: newItem.quantity,
           session: session,
-          cart_main_category: '1',
+          cart_main_category: 2,
           cart_sub_category: newItem.product_sub_category,
           rental: props.rentalid,
 
@@ -96,7 +98,7 @@ export default function Step3(props) {
     <>
       <div className="step3" id="step3">
         <h2 className="bg-primary text-white text-center py-2">
-           Step 3:Select Rented Moving Supplies
+           Step 3: Select Rented Moving Supplies
         </h2>
         <div className="row">
           <div className="container px-5 my-4">
@@ -114,7 +116,7 @@ export default function Step3(props) {
                             <img
                               src={moving.image}
                               alt=""
-                              style={{ width: 75 }}
+                              style={{ maxHeight: 180 }}
                             />
 
                              <p style={{ color: "#6AB1FF" }} ><b>{moving.subtitle}</b></p>

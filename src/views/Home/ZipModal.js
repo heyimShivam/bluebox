@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { checkZipCode } from "../../data/API";
 import SimpleReactValidator from "simple-react-validator";
+import Mainloader from "../BoxPackages/components/Mainloader";
 
 export default function ZipCode(props) {
 
@@ -13,6 +14,7 @@ export default function ZipCode(props) {
   const [, forceUpdate] = React.useState();
   const [is_selected, setSelect] = React.useState(false);
   const validator = React.useRef(new SimpleReactValidator());
+  const [mainloader, setMainloader] = React.useState(false);
 
   const [isError, setError] = React.useState(false);
   const [errorMsg, setMsg] = React.useState("");
@@ -36,10 +38,11 @@ export default function ZipCode(props) {
   };
   const handleZipCode = (e) => {
 
+    setMainloader(true);
     if (validator.current.allValid()) {
-  
+
       e.preventDefault();
-      
+
       let obj = {
         pickup_zipcode: values.pickup_zipcode,
         delivery_zipcode: values.delivery_zipcode,
@@ -47,11 +50,15 @@ export default function ZipCode(props) {
       checkZipCode(obj)
         .then((res) => {
           if (res?.data?.success) {
-            history.push("/box-packges");
+            history.push("/box-packages");
+            // localStorage.setItem('setShowHideHeader', "false") 
+            // localStorage.setItem('setshowHideFooter', "false") 
+            // localStorage.setItem('setshowHideinnerFooter', "true") 
             props.hideModal();
             props.setShowHideHeader(false);
             props.setshowHideFooter(false);
             props.setshowHideinnerFooter(true);
+
 
           } else {
             setError(true);
@@ -67,7 +74,7 @@ export default function ZipCode(props) {
       return false;
 
     }
-    
+
   };
 
   // const handleCloseModal = () => {
@@ -76,7 +83,7 @@ export default function ZipCode(props) {
 
   return (
     <>
-      {isLoading ? (
+      {/* {isLoading ? (
         <div className="text-center">
           <div className=" mt-5">
             <Spinner
@@ -91,22 +98,28 @@ export default function ZipCode(props) {
         </div>
       ) : (
         <></>
-      )}
-      <Modal
+      )} */}
+      {props.mainloader ? <Mainloader /> : " "}
+      {props.toggleModal && <Modal
         show={props.showModal}
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={props.hideModal}
       >
         <div className="">
-          <div className="">
+          <div className="" style={{position: 'relative', backgroundColor: 'white', borderRadius: '4px'}}>
             <div className="modal-header">
               <h5>
-                <img src="img/icon-truck.png" className="img-fluid" alt="" />
+                <img src="img/logo.png" className="img-fluid" alt="" />
                 Where are you moving?
               </h5>
-              <button type="button" className="close" onClick={props.hideModal}>
-                <span aria-hidden="true" class="close" data-dismiss="modal" >&times;</span>
+              <button type="button" style={{position: 'absolute', right: '14px'}}
+                      className="close" 
+                      onClick={()=>{props.toggleModalFunction(false)}}>
+                <span aria-hidden="true"
+                      class="close"
+                      data-dismiss="modal">
+                        &times;</span>
               </button>
 
             </div>
@@ -158,20 +171,21 @@ export default function ZipCode(props) {
                   </button>
                 </div> */}
                 <div className="col-12">
-                <div className="text-right mt-4 zipmodal">
-                  <button
-                    className="btn btn-dark"
-                    onClick={(e) => handleZipCode(e)}
-                  >
+                  <div className="text-right mt-4 zipmodal">
+                    <button
+                      className="btn btn-dark"
+                      onClick={(e) => handleZipCode(e)}
+                    >
                       Continue
-                  </button>
+                    </button>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
         </div>
       </Modal>
+    }
     </>
   );
 }

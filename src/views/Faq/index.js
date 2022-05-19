@@ -30,7 +30,7 @@ export default function Faq() {
     return (
         <>
             <div className="hero_faq">
-                <section class="hero move-hero position-relative">
+                <section class="hero move-faq position-relative">
                     <div class="container">
                         <div class="text-center">
                             <h1 class="text-white" data-aos="fade-down" data-aos-delay="0" data-aos-duration="1000">

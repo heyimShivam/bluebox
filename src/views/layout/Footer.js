@@ -1,27 +1,20 @@
-import React, { useState } from "react";
-import { saveNewsLetter } from "../../data/API";
-import { useToasts } from "react-toast-notifications";
+import React,{useEffect, useState} from "react";
+import { getFooter } from "../../data/API";
 
 export default function Footer() {
-  const { addToast } = useToasts();
-  const [email_address, setEmail] = useState();
-  const newsLetterSubmit = (e) => {
-    e.preventDefault();
-    let obj = { email: email_address };
-    saveNewsLetter(obj)
-      .then((res) => {
-        addToast("Request Recived Successfully. We will get back to you soon.Thanks!", {
-          appearance: "success",
-          autoDismiss: true,
-        });
-      })
-      .catch((e) => {
-        addToast("Some error occure,please try again", {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      });
-  };
+  const [footer, setFooter] = useState([]);
+
+  const Footerdata = () => {
+    getFooter()
+        .then((res) => {
+          setFooter(res.data);
+        })
+        .catch((e) => console.log(e));
+
+};
+  useEffect(() => {
+    Footerdata();
+}, []);
 
   return (
     <>
@@ -48,7 +41,8 @@ export default function Footer() {
                         Phone
                       </p>
                       <a href="tel:(719) 445-2808" className="text-white fs-13">
-                        (719) 445-2808
+                        {/* (719) 445-2808 */}
+                        {footer.results?.[0].phone_number} 
                       </a>
                     </div>
                   </div>
@@ -67,7 +61,8 @@ export default function Footer() {
                       <p className="mb-0 fs-13 font-weight-bold text-white">
                         Address:
                       </p>
-                      <p className="fs-13 mb-0 text-white">4575 Marmora Road</p>
+                      {/* <p className="fs-13 mb-0 text-white">4575 Marmora Road</p> */}
+                      {<p className="fs-13 mb-0 text-white">{footer.results?.[0].address}</p>}
                     </div>
                   </div>
                 </div>
@@ -89,7 +84,8 @@ export default function Footer() {
                         href="mailto:info@zeppgo.com"
                         className="text-white fs-13"
                       >
-                        info@BlueBox.com
+                        {/* info@BlueBox.com */}
+                         {footer.results?.[0].email} 
                       </a>
                     </div>
                   </div>
@@ -114,10 +110,10 @@ export default function Footer() {
                 />
               </a>
               <p className="text-white fs-13 mt-3">
-              Since 2009 BlueBox has delivered 
+              {/* Since 2009 BlueBox has delivered 
 						more than a half million reusable
 						moving boxes to Bay Area homes 
-						and offices. 
+						and offices.  */}
               </p>
             </div>
             <div className="col-md-4">
@@ -163,7 +159,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <a href="../terms" className="text-white fs-12">
-                    Terms & Cond
+                    Terms & Conditions
                   </a>
                 </li>
                 <li>

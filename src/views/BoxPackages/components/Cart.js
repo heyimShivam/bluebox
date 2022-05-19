@@ -25,7 +25,7 @@ function inc1(item, props) {
     product: item.product.id,
     quantity: '1',
     session: session,
-    cart_main_category: '1',
+    cart_main_category: 2,
     cart_sub_category: item.product.product_sub_category,
     rental: props.rentalid,
 
@@ -74,7 +74,7 @@ export function dec1(item, props, session) {
       product: item.product.id,
       quantity: '-1',
       session: ReactSession.get('session'),
-      cart_main_category: '1',
+      cart_main_category:2,
       cart_sub_category: item.product.product_sub_category,
       rental: props.rentalid,
     };
@@ -114,7 +114,7 @@ export function dec1(item, props, session) {
             props.setMovings(getmovingcart);
           }
 
-          props.setSelectedRental(getboxcart[0].rental_int + " Week");
+          props.setSelectedRental(getboxcart[0].rental_int + " Weeks");
           props.setRentalId(getboxcart[0].rental);
           getTotal(ReactSession.get('session')).then((newtotal) => {
             // console.log(newtotal);
@@ -181,7 +181,7 @@ function inc3(item, props) {
     product: item.product.id,
     quantity: '1',
     session: session,
-    cart_main_category: '1',
+    cart_main_category: 2,
     cart_sub_category: item.product.product_sub_category,
     rental: props.rentalid,
   };
@@ -231,7 +231,7 @@ function dec3(item, props) {
       product: item.product.id,
       quantity: '-1',
       session: ReactSession.get('session'),
-      cart_main_category: '1',
+      cart_main_category: 2,
       cart_sub_category: item.product.product_sub_category,
       rental: props.rentalid,
     };
@@ -275,14 +275,14 @@ function delmoving(item, props) {
               getTotalCart(ReactSession.get('session')).then((res) => {
                 // console.log(res); 
                 const getboxcart = res?.data?.results.filter(obj => {
-                  return obj?.product?.product_sub_category === 2;
+                  return obj?.product?.product_sub_category === 1;
                 });
                 if (getboxcart) {
                   props.setBox(getboxcart[0]);
 
                 }
                 const getpackingcart = res?.data?.results.filter(obj => {
-                  return obj?.product?.product_sub_category === 5;
+                  return obj?.product?.product_sub_category === 2;
                 });
 
                 if (getpackingcart) {
@@ -356,7 +356,7 @@ export default function Cart(props) {
       >
         <div className="card noCard maincart">
           <div className="card-header bg-primary">
-            <h5 className="text-white text-center">order summary</h5>
+            <h5 className="text-white text-center">Order Summary</h5>
           </div>
           <div className="card-body p-0 py-1">
             <ul className="list-group list-group-flush p-0">
@@ -369,12 +369,12 @@ export default function Cart(props) {
                         <p className="fs-12 font-weight-bold m-0">Package</p>
                       </td>
                       <td>
-                        <p
+                        {/* <p
                           className="fs-12 font-weight-bold m-0 text-right text-primary change-package-p"
                           onClick={changePackge}
                         >
                           Change
-                        </p>
+                        </p> */}
                       </td>
                     </tr>
                     <tr>
@@ -396,7 +396,7 @@ export default function Cart(props) {
                     <tr>
                       <td colSpan="3">
                         <p className="fs-12 font-weight-bold m-0">
-                          PACKING SUPPLIES
+                          PACKING SUPPLIES (PURCHASED)
                         </p>
                       </td>
                     </tr>
@@ -486,7 +486,7 @@ export default function Cart(props) {
       >
         <div className="card noCard maincart " >
           <div className="card-header bg-primary">
-            <h5 className="text-white text-center">order summary</h5>
+            <h5 className="text-white text-center">Order Summary</h5>
           </div>
 
           {props.loading ? <LoadingSpinner /> : " "}
@@ -529,7 +529,7 @@ export default function Cart(props) {
                     <tr>
                       <td colSpan="3">
                         <p className="fs-12 font-weight-bold m-0">
-                          PACKING SUPPLIES
+                          PACKING SUPPLIES (PURCHASED)
                         </p>
                       </td>
                     </tr>
@@ -809,7 +809,7 @@ export default function Cart(props) {
                   </td>
                   <td className="p-0 border-0 ">
                     <p className="fs-12 font-weight-bold m-0 text-right text-white" on id="total">
-                      $  {total}
+                      $  {Number(total) + Number(props.box.cart_price)}
                     </p>
                   </td>
                 </tr>

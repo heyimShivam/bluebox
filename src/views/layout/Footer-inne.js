@@ -1,27 +1,21 @@
-import React, { useState } from "react";
-import { saveNewsLetter } from "../../data/API";
-import { useToasts } from "react-toast-notifications";
+import React,{useEffect, useState} from "react";
+import { getFooter } from "../../data/API";
 
 export default function Footerinnr() {
-  const { addToast } = useToasts();
-  const [email_address, setEmail] = useState();
-  const newsLetterSubmit = (e) => {
-    e.preventDefault();
-    let obj = { email: email_address };
-    saveNewsLetter(obj)
-      .then((res) => {
-        addToast("Request Recived Successfully. We will get back to you soon.Thanks!", {
-          appearance: "success",
-          autoDismiss: true,
-        });
-      })
-      .catch((e) => {
-        addToast("Some error occure,please try again", {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      });
-  };
+  const [footer, setFooter] = useState([]);
+
+    
+  const Footerdata = () => {
+    getFooter()
+        .then((res) => {
+          setFooter(res.data);
+        })
+        .catch((e) => console.log(e));
+        // console.log(footer.results?.[0].address);
+};
+  useEffect(() => {
+    Footerdata();
+}, []);
 
   return (
     <>
@@ -48,7 +42,8 @@ export default function Footerinnr() {
                         Phone
                       </p>
                       <a href="tel:(719) 445-2808" className="text-white fs-13">
-                        (719) 445-2808
+                        {/* (719) 445-2808 */}
+                        {footer.results?.[0].phone_number} 
                       </a>
                     </div>
                   </div>
@@ -89,7 +84,8 @@ export default function Footerinnr() {
                         href="mailto:info@zeppgo.com"
                         className="text-white fs-13"
                       >
-                        info@bluebox.com
+                        {/* info@bluebox.com */}
+                        {footer.results?.[0].email} 
                       </a>
                     </div>
                   </div>
@@ -163,7 +159,7 @@ export default function Footerinnr() {
                 </li>
                 <li>
                   <a href="http://localhost:3000/" className="text-white fs-12">
-                    Terms & Cond
+                    Terms & Conditions
                   </a>
                 </li>
                 <li>

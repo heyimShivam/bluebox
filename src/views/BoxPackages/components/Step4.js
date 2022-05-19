@@ -30,6 +30,7 @@ function step4BackBtn() {
   document.getElementById("step3").style.display = "block";
   document.getElementById("st4").classList.remove("active");
   document.getElementById("st3").classList.add("active");
+  document.getElementById("st3li").classList.add("current");  
 
   document.getElementById("st4li").classList.remove("current");
   document.getElementById("st3li").classList.remove("complete");
@@ -92,28 +93,37 @@ export default function Step4(props) {
         session: ReactSession.get('session'),
         rental: event.target.value,
       }
-
+      // console.log(data.rental)
+      // return false;
       getnewRental(data)
         .then((res) => {
-
-          getCart('2', ReactSession.get('session'))
+            console.log(res);
+          getCart('1', ReactSession.get('session'))
             .then((newcartdata) => {
+              // console.log(newcartdata);
+              // return false;
               props.setBox(newcartdata.data?.results[0]);
               getTotal(ReactSession.get('session'))
                 .then((newtotal) => {
 
                   getTotalCart(ReactSession.get('session')).then((res) => {
-
+// console.log(res);
+//               return false;
                     let rental1 = "";
                     let rentalid1 = "";
 
                     if (res.data.results.length > 0) {
-                      rental1 = res.data.results[0].rental_int + " Week";
+                      // alert("here")
+                      // console.log(res.data.results[0].rental_int)
+                      rental1 = res.data.results[0].rental_int + " Weeks";
                       rentalid1 = res.data.results[0].rental;
                     } else {
-                      rental1 = "2 Week";
-                      rentalid1 = '29d0c6c5-7098-40ae-9c2f-3147ab3e9fa0';
+                      rental1 = "2 Weeks";
+                      rentalid1 = '781ce70c-ba18-46b1-b585-57dda9f3c778';
                     }
+                    // console.log("rentalid1");
+                    // console.log(rentalid1);
+                    // console.log(rental1);
 
                     getBoxProducts(rental1);
                     props.setSelectedRental(rental1);
@@ -121,14 +131,14 @@ export default function Step4(props) {
                     // props.setDelivery({ ...props.delivery, rental: rentalid1 });
 
                     const getboxcart = res?.data?.results.filter(obj => {
-                      return obj?.product?.product_sub_category === 2;
+                      return obj?.product?.product_sub_category === 1;
                     });
                     if (getboxcart) {
                       props.setBox(getboxcart[0]);
 
                     }
                     const getpackingcart = res?.data?.results.filter(obj => {
-                      return obj?.product?.product_sub_category === 5;
+                      return obj?.product?.product_sub_category === 2;
                     });
 
                     if (getpackingcart) {
@@ -209,6 +219,7 @@ export default function Step4(props) {
     if(event.target.name == "description"){
       if(event.target.value){
         // localStorage.setItem("deliverd",event.target.value)
+        setDelivery({ ...delivery, description: event.target.value })
       }
     }
     if (event.target.name == "extra_work") {
@@ -226,14 +237,14 @@ export default function Step4(props) {
             getTotalCart(ReactSession.get('session')).then((res) => {
               // console.log(res); 
               const getboxcart = res?.data?.results.filter(obj => {
-                return obj?.product?.product_sub_category === 2;
+                return obj?.product?.product_sub_category === 1;
               });
               if (getboxcart) {
                 props.setBox(getboxcart[0]);
 
               }
               const getpackingcart = res?.data?.results.filter(obj => {
-                return obj?.product?.product_sub_category === 5;
+                return obj?.product?.product_sub_category === 2;
               });
 
               if (getpackingcart) {
@@ -245,8 +256,8 @@ export default function Step4(props) {
               if (getmovingcart) {
                 props.setMovings(getmovingcart);
               }
-              console.log(getboxcart[0]);
-              props.setSelectedRental(getboxcart[0].rental_int + " Week");
+              // console.log(getboxcart[0]);
+              props.setSelectedRental(getboxcart[0].rental_int + " Weeks");
               props.setRentalId(getboxcart[0].rental);
               getTotal(ReactSession.get('session')).then((newtotal) => {
                 // console.log(newtotal);
@@ -347,7 +358,7 @@ export default function Step4(props) {
 
   const handleDeliverySubmit = (e) => {
     e.preventDefault();
-    // if (validator.current.allValid()) {
+    if (validator.current.allValid()) {
 
     let data = {
       session: ReactSession.get('session'),
@@ -363,7 +374,7 @@ export default function Step4(props) {
       extra_work: delivery?.extra_work,
     }
     // console.log(data?.delivery_window_1)
-    //  console.log(data)
+     console.log(data)
     addDelivery(data)
       .then((res) => {
         getTotal(ReactSession.get('session'))
@@ -381,15 +392,15 @@ export default function Step4(props) {
                 // })
               })
             step4Btn()
-            // props.setLoading(false);
+
           })
       })
     step4Btn()
 
-    // } else {
-    //   validator.current.showMessages();
-    //   forceUpdate(1);
-    // }
+    } else {
+      validator.current.showMessages();
+      forceUpdate(1);
+    }
   };
 
   const callApi = () => {
@@ -466,6 +477,7 @@ export default function Step4(props) {
                     isValidDate={weekend}
                     name="delivery_date"
                     dateFormat="YYYY-MM-DD"
+                    placeholder="Choose a date"
                     closeOnSelect
                     value={ delivery.delivery_date}
                     // defaultDate={localStorage.getItem("deliverydate")}
@@ -665,9 +677,11 @@ export default function Step4(props) {
                 <div className="text-right mt-4">
                   <button
                     className="btn btn-dark step4Btn"
-                   
-                    onClick={step4Btn}
-                    onClick={handleDeliverySubmit}
+                    // onClick={step4Btn}
+                    onClick={ (e) => {
+                      step4Btn();
+                      handleDeliverySubmit(e);
+                    }}
                   >
                     Step 5:  Pickup Details
                   </button>

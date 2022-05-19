@@ -14,6 +14,8 @@ import {
 } from "@stripe/react-stripe-js";
 
 import { ReactSession } from 'react-client-session';
+import Previewloader from "../BoxPackages/components/Previewloader";
+// import { propTypes } from "react-bootstrap/esm/Image";
 // import { propTypes } from "react-bootstrap/esm/Image";
 // s
 // import "./styles.css";
@@ -108,7 +110,7 @@ const ResetButton = ({ onClick }) => (
 
 const CardField = ({ onChange, error }) => (
   <div className="col-md-6 mt-3">
-    <label>Card Detail</label>
+    <label>Card Details</label>
     <CardElement
       options={CARD_OPTIONS}
       onChange={onChange}
@@ -118,7 +120,7 @@ const CardField = ({ onChange, error }) => (
   </div>
 );
 
-const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discount, address, card, setCard, setOrderid, orderid, details, setDetails, pickup, setPickupdetails, personaldetails, setPersonal, setPreview, preview }) => {
+const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discount, address, card, setCard, setOrderid, orderid, details, setDetails, pickup, setPickupdetails, personaldetails, setPersonal, setPreview, preview,previewloader,setPreviewloader }) => {
   // console.log(address)
   // console.log(address.country)
   const stripe = useStripe();
@@ -143,6 +145,7 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setPreviewloader(true); 
     // console.log(billingDetails)
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -245,6 +248,7 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
       // return false;
       addPersonal(data)
         .then((res) => {
+          //setPreviewloader(true); 
           addOrder(orderdetails)
             .then((res) => {
               // console.log(res?.data?.order_id)
@@ -259,6 +263,7 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
                       // console.log(personaldata);
                       // console.log(personaldata?.data?.results?.[0]);
                       setPersonal(personaldata?.data?.results?.[0])
+                    
                     })
                   getPickupDetails(res?.data?.order_id)
                     .then((pickupdata) => {
@@ -266,10 +271,19 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
                     })
                   getPreview(res?.data?.order_id)
                     .then((nd) => {
+                      // console.log(nd);
                       setPreview(nd?.data?.results?.[0]);
+              
                     })
 
                 })
+              // res?.data? cart_items[] cart_price
+              total = 0;
+              res?.data?.cart_items.map((cartData) => {
+                console.log("total "+total);
+                total = Number(cartData.cart_price) + Number(total);
+              })
+              // total 
               let order = {
                 payment: payload.paymentMethod,
                 session: res?.data?.order_id,
@@ -277,15 +291,41 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
                 discount: discount,
 
               }
+              // console.log('shivam this is the key');
+              // console.log( order );
+
+              // console.log('payload');
+              // console.log( payload );
+
+              console.log('res');
+              console.log( res.data );
+              // let subTotal = 0;
+              // res.data.cart_items.map((cartItem) => {
+              //   subTotal = Number(subTotal) + Number(cartItem.cart_price)
+              // })
+              // res.data.total = subTotal;
+              // console.log('new res')
+              // console.log(res.data);
+                 
+              
+              // return false;
               placeOrder(order)
                 .then((res) => {
                   if (res?.data?.success) {
-                    console.log("back from request:-", res);
+                    // console.log("back from request:-", res);
 
                     document.getElementById("step6").style.display = "none";
                     document.getElementById("orderpreview").style.display = "block";
 
+                    document.getElementById("st6li").classList.remove("current");
+                    document.getElementById("st6li").classList.add("complete");
+                    // document.getElementById("st6").classList.add("active");
+                    // document.getElementById("st6li").classList.add("current");
+                    console.log('new payment log');
+                    console.log(payload.paymentMethod)
                     setPaymentMethod(payload.paymentMethod);
+                    // return false;
+                    setPreviewloader(false);
                     clearstorage();
 
 
@@ -298,10 +338,11 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
         .catch((e) => {
           console.log("order place error:-", e);
         });
-
+        // return false;
       setPaymentMethod(payload.paymentMethod);
       // clearstorage();
       // console.log("card"+card);
+      // return false;
 
     }
   };
@@ -327,14 +368,14 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
   // console.log(orderid)
 
   return paymentMethod ? (
-
     <div className="Result">
+      {previewloader ? <Previewloader /> : " "}
+       {/* <Previewloader />  */}
       <div className="ResultTitle" role="alert">
         Payment successful
       </div>
       <div className="ResultMessage">
-        Thanks for trying Stripe Elements. No money was charged, but we
-        generated a PaymentMethod: {paymentMethod.id}
+        Thank you for your order! An email has been sent to you with all the details of your order including delivery and pickup details.
       </div>
 
       <ResetButton onClick={reset} />
@@ -355,33 +396,6 @@ const CheckoutForm = ({ delivery_detail, pickup_detail, personal, total, discoun
             setBillingDetails({ ...billingDetails, name: e.target.value });
           }}
         />
-
-        {/* <Field
-          label="Email"
-          className="form-control"
-          id="email"
-          type="email"
-          placeholder="janedoe@gmail.com"
-          required
-          autoComplete="email"
-          value={billingDetails.email}
-          onChange={(e) => {
-            setBillingDetails({ ...billingDetails, email: e.target.value });
-          }}
-        />
-
-        <Field
-          label="Phone"
-          id="phone"
-          type="tel"
-          placeholder="(941) 555-0123"
-          required
-          autoComplete="tel"
-          value={billingDetails.phone}
-          onChange={(e) => {
-            setBillingDetails({ ...billingDetails, phone: e.target.value });
-          }}
-        /> */}
 
         <CardField
           onChange={(e) => {
@@ -439,11 +453,12 @@ function step6BackBtn() {
 
   document.getElementById("st6").classList.remove("active");
   document.getElementById("st5").classList.add("active");
+  document.getElementById("st5li").classList.add("current");  
   document.getElementById("st6li").classList.remove("current");
   document.getElementById("st5li").classList.remove("complete");
 }
 
-const PaymentApp = ({ delivery_detail, pickup_detail, personal, total, discount, address, card, setCard, orderid, setOrderid, details, setDetails, pickupdetails, setPickupdetails, personaldetails, setPersonal, setPreview, preview }) => {
+const PaymentApp = ({ delivery_detail, pickup_detail, personal, total, discount, address, card, setCard, orderid, setOrderid, details, setDetails, pickupdetails, setPickupdetails, personaldetails, setPersonal, setPreview, preview,setPreviewloader,previewloader }) => {
   return (
     <>
       <div className="AppWrapper">
@@ -465,6 +480,8 @@ const PaymentApp = ({ delivery_detail, pickup_detail, personal, total, discount,
             setPickupdetails={setPickupdetails}
             personaldetails={personaldetails}
             setPersonal={setPersonal}
+            setPreviewloader={setPreviewloader}
+            previewloader={previewloader}
             setPreview={setPreview}
             preview={preview}
           />

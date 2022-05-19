@@ -23,6 +23,7 @@ function step5BackBtn() {
   document.getElementById("step4").style.display = "block";
   document.getElementById("st5").classList.remove("active");
   document.getElementById("st4").classList.add("active");
+  document.getElementById("st4li").classList.add("current");  
   document.getElementById("st5li").classList.remove("current");
   document.getElementById("st4li").classList.remove("complete");
 }
@@ -130,13 +131,13 @@ export default function Step5(props) {
             getTotalCart(ReactSession.get('session')).then((res) => {
               // console.log(res); 
               const getboxcart = res?.data?.results.filter(obj => {
-                return obj?.product?.product_sub_category === 2;
+                return obj?.product?.product_sub_category === 1;
               });
               if (getboxcart) {
                 props.setBox(getboxcart[0]);
               }
               const getpackingcart = res?.data?.results.filter(obj => {
-                return obj?.product?.product_sub_category === 5;
+                return obj?.product?.product_sub_category === 2;
               });
 
               if (getpackingcart) {
@@ -149,7 +150,7 @@ export default function Step5(props) {
                 props.setMovings(getmovingcart);
               }
 
-              props.setSelectedRental(getboxcart[0].rental_int + " Week");
+              props.setSelectedRental(getboxcart[0].rental_int + " Weeks");
               props.setRentalId(getboxcart[0].rental);
               getTotal(ReactSession.get('session'))
                 .then((newtotal) => {
@@ -225,8 +226,8 @@ export default function Step5(props) {
 
   const handleDeliverySubmit = (e) => {
     e.preventDefault();
-    // if (validator.current.allValid()) {  
-    // console.log(pickup) 
+    if (validator.current.allValid()) {  
+    //  console.log(pickup) 
     let data = {
       session: ReactSession.get('session'),
       pickup_date: props.getPickupdate,
@@ -247,10 +248,10 @@ export default function Step5(props) {
       })
 
     step5Btn()
-    // } else {
-    //   validator.current.showMessages();
-    //   forceUpdate(1);
-    // }
+    } else {
+      validator.current.showMessages();
+      forceUpdate(1);
+    }
   };
 
   const callApi = () => {
@@ -373,7 +374,7 @@ export default function Step5(props) {
                   )}
                 </div>
                 <div className="col-md-6 mt-3">
-                  <label>Pick UP Address *</label>
+                  <label>Pick Up Address *</label>
                  
                   <Autocomplete
 
@@ -471,8 +472,11 @@ export default function Step5(props) {
                 <div className="text-right mt-4">
                   <button
                     className="btn btn-dark step5Btn"
-                    onClick={step5Btn}
-                    onClick={handleDeliverySubmit}
+                    // onClick={step5Btn}
+                    onClick={ (e) => {
+                      step5Btn();
+                      handleDeliverySubmit(e);
+                    }}
                   >
                     Step 6: Personal & Payment Details
                   </button>

@@ -6,11 +6,12 @@ import { getCoupon, getTotal, getHdyfu, getPersonaldetails, getDeliverDetails, g
 
 
 export default function Orderpreview(props) {
-//   const [details, setDetails] = React.useState([]);
-//   const [pickup, setPickup] = React.useState([]);
-//   const [personal, setPersonal] = React.useState([]);
+//  const [details, setDetails] = React.useState([]);
+  const [pickup, setPickup] = React.useState([]);
+  const [personal, setPersonal] = React.useState([]);
 
   const { box, packing_products, moving_products, total,orderid,setOrderid ,details,pickupdetails,personaldetails,preview} = props;
+  // const { box, packing_products, moving_products, total,orderid,setOrderid ,pickupdetails,personaldetails,preview} = props;
   
   // console.log(personaldetails);
 //   // const id = orderid;
@@ -25,22 +26,23 @@ export default function Orderpreview(props) {
   React.useEffect((props) => {
 
     // getdetails();
-    // getDeliverDetails(orderid)
-    // .then((res) => {
-    //   console.log(res?.data?.results?.[0])
-    //   setDetails(res?.data?.results?.[0]);
-    //   getPersonaldetails(orderid)
-    //     .then((res) => {
-    //       // console.log(res?.data?.results?.[0])
-    //       setPersonal(res?.data?.results?.[0])
-    //     })
-    //   getPickupDetails(orderid)
-    //     .then((res) => {
-    //       // console.log(res?.data?.results?.[0]);
-    //       setPickup(res?.data?.results?.[0]);
-    //     })
+    getDeliverDetails(orderid)
+    .then((res) => {
+      // props.setPreviewloader(false);
+      // console.log(res?.data?.results?.[0])
+      // setDetails(res?.data?.results?.[0]);
+      getPersonaldetails(orderid)
+        .then((res) => {
+          // console.log(res?.data?.results?.[0])
+          setPersonal(res?.data?.results?.[0])
+        })
+      getPickupDetails(orderid)
+        .then((res) => {
+          // console.log(res?.data?.results?.[0]);
+          setPickup(res?.data?.results?.[0]);
+        })
 
-    // })
+    })
 
   }, []);
 // console.log(pickup);

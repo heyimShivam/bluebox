@@ -15,14 +15,15 @@ function step2Btn() {
 function step2BackBtn() {
   document.getElementById("step2").style.display = "none";
   document.getElementById("step1").style.display = "block";
+  document.getElementById("show_btn").style.display = "block";
+  document.getElementById("tabsSection").classList.remove("newstp");
 
   document.getElementById("st2").classList.remove("active");
   document.getElementById("st1").classList.add("active");  
+  document.getElementById("st1li").classList.add("current");  
 
   document.getElementById("st2li").classList.remove("current");
   document.getElementById("st1li").classList.remove("complete");
-
-
   
 }
 
@@ -55,12 +56,12 @@ export default function Step2(props) {
         product: newItem.id,
         quantity: newItem.quantity,
         session: session,
-        cart_main_category: '1',
+        cart_main_category: 2,
         cart_sub_category: newItem.product_sub_category,
         rental: props.rentalid,
       };
 
-      console.log(data)
+      // console.log(data)
       addtoCart(data)
         .then((res) => {
           getCart(data.cart_sub_category, session)
@@ -126,7 +127,7 @@ export default function Step2(props) {
                             <img
                               src={packing.image}
                               alt=""
-                              style={{ maxHeight: 100 }}
+                              style={{ maxHeight: 180 }}
                             />
                             <p style={{ color: "#6AB1FF" }} ><b>{packing.subtitle}</b></p>
                           </div>

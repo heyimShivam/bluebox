@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
-import SimpleReactValidator from "simple-react-validator";
+import React from "react";
 
 export default function index() {
     return (
         <>
-            <section className="hero move-hero position-relative">
+            <section className="hero move-movingbox position-relative">
                 <div className="container">
                     <div className="text-center">
                         <h1 className="text-white" data-aos="fade-down" data-aos-delay="0" data-aos-duration="1000">
-                            Why Rent <span className="font-weight-bold">Moving <span className="text-primary">Boxes</span></span>
+                          <span className="font-weight-bold"> Why Rent Moving Boxes</span>
                         </h1>
                         <button className="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000">Order Now</button>
                     </div>
@@ -21,42 +20,42 @@ export default function index() {
                             <div className="cardbox_otr">
                                 <div className="cardbox_1">
                                     <div className="col-sm-3">
-                                        <img src="img/card_box.png" />
+                                        <img src="img/card_box.png" alt="" />
                                     </div>
                                 </div>
                                 <div className="cardbox_2">
                                     <div className="col-sm-6">
                                         <div className="card_text">
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>Free, convenient delivery and pick up</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>100% recycled plastic-eco-friendly and zero waste</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>No need to build boxes, no tape needed</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>2x storage capacity of cardboard</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>Ideal for low-stress home or office moves</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>Waterproof and crush-proof design</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt=""/>
                                                 <h5>Saves time, money and energy</h5>
                                             </div>
                                             <div className="card_text_inner">
-                                                <img src="img/card_text_inner_img.png" />
+                                                <img src="img/card_text_inner_img.png" alt="" />
                                                 <h5>Built-in handles make boxes easy to carry and stack</h5>
                                             </div>
                                         </div>
@@ -65,7 +64,7 @@ export default function index() {
                                 <div className="cardbox_3">
                                     <div className="col-sm-3">
                                         <div className="card_box_2">
-                                            <img src="img/card_box_2.png" />
+                                            <img src="img/card_box_2.png" alt="" />
                                         </div>
                                     </div>
                                 </div>

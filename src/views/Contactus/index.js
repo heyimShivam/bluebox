@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import SimpleReactValidator from "simple-react-validator";
+import ZipCode from "../Home/ZipModal";
 import { addContactus } from "../../data/API";
 
 export default function Index(props) {
     props.setFooteroffice(true);
     props.setshowHideFooter(false);
+
+    const [, forceUpdate] = useState();
+    const [openZipModal, setZipModal] = React.useState(false);
+    const validator = useRef(new SimpleReactValidator());
     const [isError, setError] = React.useState(false);
     const [errorMsg1, setMsg1] = React.useState("");
     const [errorMsg2, setMsg2] = React.useState("");
+    const [toggleModal, setToggleModal] = useState(true);
 
     const [values, setValues] = React.useState({
         full_name: "",
@@ -23,26 +29,46 @@ export default function Index(props) {
 
     const submitdata = (e) => {
         e.preventDefault();
-        let obj = {
-            full_name: values.full_name,
-            email: values.email,
-            phone: values.phone,
-            message: values.message,
-        };
+        if (validator.current.allValid()) {
 
-        addContactus(obj)
-            .then((res) => {
-                console.log(res);
-                if (res?.status == "201") {
-                    setError(true);
-                    setMsg1("Thank You For Contact Us");
-                    // values=""
-                }
-            })
+            let obj = {
+                full_name: values.full_name,
+                email: values.email,
+                phone: values.phone,
+                message: values.message,
+            };
+
+            addContactus(obj)
+                .then((res) => {
+                    console.log(res);
+                    if (res?.status == "201") {
+                        setError(true);
+                        setMsg1("Message Sent Successfully");
+                        // values=""
+                    }
+                })
+        } else {
+            validator.current.showMessages();
+            forceUpdate(1);
+        }
     };
-
+    function toggleModalFunction(argu) {
+        setToggleModal(argu);   
+    }
     return (
         <>
+            <ZipCode
+                showModal={openZipModal}
+                hideModal={true}
+                toggleModal={toggleModal}
+                toggleModalFunction={toggleModalFunction}
+                showHideHeader={props.showHideHeader}
+                setShowHideHeader={props.setShowHideHeader}
+                showHideFooter={props.showHideFooter}
+                setshowHideFooter={props.setshowHideFooter}
+                showHideinnerFooter={props.showHideinnerFooter}
+                setshowHideinnerFooter={props.setshowHideinnerFooter}
+            />
             <section className="hero move-contact position-relative">
                 <div className="container">
                     <div className="text-center">
@@ -92,7 +118,14 @@ export default function Index(props) {
                                         //placeholder="Enter Zipcode"
                                         name="full_name"
                                         value={values.full_name}
-                                        onChange={(e) => handleChange(e)} />
+                                        onChange={(e) => handleChange(e)}
+                                    />
+                                    {validator.current.message(
+                                        "Full Name",
+                                        values.full_name,
+                                        "required",
+                                        { className: "text-danger" }
+                                    )}
 
                                     <span className="form-error ">Please enter your name</span>
                                 </label>
@@ -107,7 +140,12 @@ export default function Index(props) {
                                         value={values.email}
                                         onChange={(e) => handleChange(e)}
                                     />
-
+                                    {validator.current.message(
+                                        "Email Address",
+                                        values.email,
+                                        "required",
+                                        { className: "text-danger" }
+                                    )}
                                     <span className="form-error ">Please enter a valid email address</span>
                                 </label>
 
@@ -120,12 +158,24 @@ export default function Index(props) {
                                         value={values.phone}
                                         onChange={(e) => handleChange(e)}
                                     />
+                                    {validator.current.message(
+                                        "Phone Number",
+                                        values.phone,
+                                        "required",
+                                        { className: "text-danger" }
+                                    )}
                                     <span className="form-error ">Please enter a valid phone number</span>
                                 </label>
 
                                 <label>Your message
                                     <textarea name="message" pattern="contact_message" rows="5" minlength="20" required=""
                                         className="form-control" value={values.message} onChange={(e) => handleChange(e)}></textarea>
+                                    {validator.current.message(
+                                        "Your message",
+                                        values.message,
+                                        "required",
+                                        { className: "text-danger" }
+                                    )}
                                     <span className="form-error ">Your message is too short</span>
                                 </label>
 

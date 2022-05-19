@@ -1,13 +1,15 @@
-import React, { isValidElement } from "react";
+import React from "react";
 import ZipCode from "../Home/ZipModal";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 
 
 export default function Header(props) {
   // console.log(props);
   const [openZipModal, setZipModal] = React.useState(false);
-  const history = useHistory();
+  
+  const [toggleModal, setToggleModal] = React.useState(true);
+  // const history = useHistory();
  
 
   const hideZipM = () => {
@@ -17,19 +19,26 @@ export default function Header(props) {
   const showZipModal = () => {
     setZipModal(true);
   };
-  
+  function toggleModalFunction(argu) {
+    setToggleModal(argu);   
+}
 
   return (
     <>
       <ZipCode 
       showModal={openZipModal}
-       hideModal={false}
+       hideModal={hideZipM}
+       toggleModal={toggleModal}
+       toggleModalFunction={toggleModalFunction}
        showHideHeader={props.showHideHeader} 
        setShowHideHeader={props.setShowHideHeader}
        showHideFooter={props.showHideFooter}
        setshowHideFooter={props.setshowHideFooter}
        showHideinnerFooter={props.showHideinnerFooter}
        setshowHideinnerFooter={props.setshowHideinnerFooter}
+      //  values={props.values}
+      //  setValues={props.setValues}
+
       //  zipcode={zipcode}
       //  setZipcode={setZipcode}
       
@@ -72,11 +81,11 @@ export default function Header(props) {
                     Pricing
                   </a>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a className="nav-link text-dark" href="../movingboxes">
                     Moving Boxes
                   </a>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <a className="nav-link text-dark" href="../movingsupplies">
                     Moving Supplies
@@ -84,7 +93,7 @@ export default function Header(props) {
                 </li>
                 <li className="nav-item">
                   <a className="nav-link text-dark" href="../location">
-                    Location
+                  Service Area
                   </a>
                 </li>
 
@@ -93,10 +102,11 @@ export default function Header(props) {
                     FAQ
                   </a>
                 </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link text-white py-1 btn btn-dark"
-                    onClick={() => showZipModal()}
+                <li className="nav-item" style={{marginTop: '4px'}}>
+                  <a className="nav-link text-white py-1 btn btn-dark"
+                    onClick={
+                      () => {showZipModal(); setToggleModal(true)}
+                    }
                   >
                     Order Now
                   </a>

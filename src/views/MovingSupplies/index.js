@@ -1,6 +1,5 @@
 import React from "react";
 import ZipCode from "../Home/ZipModal";
-import SimpleReactValidator from "simple-react-validator";
 import { getSelectMovings } from "../../data/API";
 
 export default function Index() {
@@ -13,6 +12,8 @@ export default function Index() {
     const showZipModal = () => {
         setZipModal(true);
     };
+    
+    const [toggleModal, setToggleModal] = React.useState(true);
     const [movingProductss, setMovingProductss] = React.useState([]);
 
     const callAPI = () => {
@@ -27,12 +28,16 @@ export default function Index() {
     React.useEffect(() => {
         callAPI();
     }, []);
-
+    function toggleModalFunction(argu) {
+        setToggleModal(argu);   
+    }
     return (
         <>
          <ZipCode 
       showModal={openZipModal}
        hideModal={hideZipM} 
+       toggleModal={toggleModal}
+            toggleModalFunction={toggleModalFunction}
     //    showHideHeader={props.showHideHeader} 
     //    setShowHideHeader={props.setShowHideHeader}
     //    showHideFooter={props.showHideFooter}
@@ -40,18 +45,18 @@ export default function Index() {
     //    showHideinnerFooter={props.showHideinnerFooter}
     //    setshowHideinnerFooter={props.setshowHideinnerFooter}
        />
-            <section className="hero move-hero position-relative">
+            <section className="hero move-movingsupply position-relative">
                 <div className="container">
                     <div className="text-center">
                         <h1 className="text-white" data-aos="fade-down" data-aos-delay="0" data-aos-duration="1000">
-                            Why Rent <span className="font-weight-bold">Moving <span className="text-primary">Boxes</span></span>
+                            <span className="font-weight-bold">Moving supplies</span>
                         </h1>
-                        <button className="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000" onClick={() => showZipModal()} >Order Now</button>
+                        <button className="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000" onClick={() => {showZipModal(); setToggleModal(true)}} >Order Now</button>
                     </div>
                 </div>
             </section>
             <section className="moving-supplies" >
-            <h2 className="text-center page-head">All of the essential moving supplies to make moving easy</h2>
+            <h2 className="text-center page-head">Everything you need for an easy, stress-free move</h2>
 
             {movingProductss?.results?.map((moving) => {
                 //  console.log(moving)
@@ -64,16 +69,16 @@ export default function Index() {
                                     <div className="row">
                                         <div className="columns small-12 medium-6 large-4 product-image">
                                             <img
-                                                src={moving.image}
+                                                src={ moving.image}
                                                 alt=""
-                                                style={{ height: "200px" }}
+                                                style={{ height: "250px" }}
                                             />
                                             {/* <img src="img/ones.png"></img> */}
                                         </div>
                                         <div className="columns small-12 medium-6 large-8">
                                             <h3>{moving.title}</h3>
                                             <span className="product-price">
-                                                $4 per week
+                                                ${moving.price} {moving.unit}
                                             </span>
                                             <div className="product-description">
                                                 {/* <p>Our patent pending exclusive reusable plate divider insert is a must have when packing all your plates and bowls from the kitchen. It can hold up to 18 plates and can be easily adjusted to accommodate bowls as well. Just place each plate in one of the 16 sections of the divider and you'll be done packing your kitchen before you know it. These are a reusable rental item and are made from corrugated plastic.</p> */}
@@ -103,7 +108,7 @@ export default function Index() {
                                                 </div> */}
 
                                             </div>
-                                            <a href="#." className="button alert" onClick={() => showZipModal()}>Order Now</a>
+                                            <a href="#." className="button alert" onClick={() => {showZipModal(); setToggleModal(true)}}>Order Now</a>
                                         </div>
                                     </div>
                                 </div>

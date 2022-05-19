@@ -1,0 +1,17 @@
+http://www.bitsumma.com/2018/11/07/running-production-and-deployment-react-apps-on-the-same-ec2-host/
+
+
+
+
+
+unrara files
+1. go to directory 
+2. apply this command
+unrar e bluebox.rar
+
+delete files
+rm *.filetype
+
+
+remove dir
+rm -r dirname

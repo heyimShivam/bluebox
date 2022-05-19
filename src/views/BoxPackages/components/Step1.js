@@ -9,17 +9,20 @@ import Mainloader from "./Mainloader";
 function step1Btn() {
   document.getElementById("step1").style.display = "none";
   document.getElementById("step2").style.display = "block";
+  document.getElementById("step2").classList.add += " disabled";
+  document.getElementById("show_btn").style.display = "none";
   //  document.getElementById("orderpreview").style.display = "none";
 
   document.getElementById("st1li").classList.remove("current");
   document.getElementById("st1li").classList.add("complete");
+  document.getElementById("tabsSection").classList.add("newstp");
   document.getElementById("st2").classList.add("active");
   document.getElementById("st2li").classList.add("current");
 }
 
 
 export default function Step1(props) {
-  console.log(props)
+  // console.log(props)
   const [rentals, setRentalList] = useState([]);
   const [is_selected, setSelect] = useState(false);
   const [hidden, setHidden] = useState(true);
@@ -36,6 +39,11 @@ export default function Step1(props) {
         props.setMainloader(true);
         setHidden(false);
         props.setTotal(res?.data?.session_cart_total);
+        
+        let totalsum = Number(res?.data?.session_cart_total) + Number(props.box.cart_price);
+        console.log(totalsum);
+        props.setTotal(totalsum)
+        
         props.setTax(res?.data?.tax);
         props.setStairevevators(res?.data?.extra_cost);
 
@@ -66,11 +74,11 @@ export default function Step1(props) {
       let rentalid1 = "";
 
       if (res.data.results.length > 0) {
-        rental1 = res.data.results[0].rental_int + " Week";
+        rental1 = res.data.results[0].rental_int + " Weeks";
         rentalid1 = res.data.results[0].rental;
       } else {
-        rental1 = "2 Week";
-        rentalid1 = 'be7f2421-2168-45ce-ab4e-d5ed5f68ab69';
+        rental1 = "2 Weeks";
+        rentalid1 = '2';
       }
 
       getBoxProducts(rental1);
@@ -160,14 +168,14 @@ export default function Step1(props) {
         getTotalCart(ReactSession.get('session')).then((res) => {
 
           const getboxcart = res?.data?.results.filter(obj => {
-            return obj?.product?.product_sub_category === 2;
+            return obj?.product?.product_sub_category === 1;
           });
           if (getboxcart) {
             props.setBox(getboxcart[0]);
 
           }
           const getpackingcart = res?.data?.results.filter(obj => {
-            return obj?.product?.product_sub_category === 5;
+            return obj?.product?.product_sub_category === 2;
           });
 
           if (getpackingcart) {
@@ -182,8 +190,6 @@ export default function Step1(props) {
 
           getTotal(session).then((newtotal) => {
             props.setTotal(newtotal?.data?.session_cart_total);
-            // props.setMainloader(false);
-
           });
         });
       });
@@ -191,12 +197,12 @@ export default function Step1(props) {
   }
 
   const handlePackageClick = (obj) => {
-    // console.log(new_rental)
+    console.log(obj)
     let data = {
       product: obj.id,
       quantity: obj.quantity,
       session: session,
-      cart_main_category: '1',
+      cart_main_category: 2,
       cart_sub_category: obj.product_sub_category,
       rental: obj.period_id,
     };
@@ -209,7 +215,8 @@ export default function Step1(props) {
           .then((newdata) => {
             props.setBox(newdata.data?.results[0]);
             setSelected(obj?.id);
-            getTotal(ReactSession.get('session')).then((res) => {
+            getTotal(ReactSession.get('session'))
+              .then((res) => {
             props.setTotal(res?.data?.session_cart_total);
 
             })
@@ -226,25 +233,22 @@ export default function Step1(props) {
     // getBoxProducts();
     gotcart(session);
     // document.getElementById("orderpreview").style.display = "none";
-
     // props.setShowHideHeader(false);
     // props.setshowHideFooter(false);
     // props.setshowHideinnerFooter(true);
-   
-  
-
 
   }, []);
   return (
     <>
       {props.mainloader ? <Mainloader /> : " "}
+      
       <div className="step1" id="step1">
         <h2 className="bg-primary text-white text-center py-2">
           Step 1: Rental Period and Box Package
         </h2>
         <div className="row">
           <div className="col-2">
-            <p className="fs-14 text-center">Select rental period</p>
+            <b><p className="fs-14 text-center">Select <br/> Rental Period</p></b>
           </div>
           <div className="col-10 m-auto">
             <div className="pagination">
@@ -281,12 +285,13 @@ export default function Step1(props) {
                         </div>
                       </div>
                       <div class="bins">
-                        <div class="bins_round">
+                        {/* <div class="bins_round">
                           <h5>{obj.total_boxes}</h5>
                           <span>Box</span>
-                        </div>
+                        </div> */}
                         <div class="round_box">
-                          <img src="img/round-box.png" />
+                          {/* <img src="img/bins.png" /> */}
+                          <h5>{obj.total_boxes}</h5>
                         </div>
                       </div>
                       <div className="card-body">

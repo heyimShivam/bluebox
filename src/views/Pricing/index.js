@@ -1,12 +1,47 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import ZipCode from "../Home/ZipModal";
-import SimpleReactValidator from "simple-react-validator";
-import { rentalsPeriods, getBoxPackages, getPackage } from "../../data/API";
+// import SimpleReactValidator from "simple-react-validator";
+import { getBoxPackages, getTotalCart, clearCart  } from "../../data/API";
+import { ReactSession } from 'react-client-session';
 
-export default function Index() {
+export default function Index(props) {
+    // props.setFooteroffice(true);
+    // props.setshowHideFooter(false);
     const [openZipModal, setZipModal] = React.useState(false);
     const [product, setProduct] = useState([]);
+    const [toggleModal, setToggleModal] = useState(true);
+    const [category, setCategory] = useState("Home");
 
+  const [active, setActive] = React.useState('Home');
+  
+    const setnewcategory = (newcat) => {
+        // localStorage.setItem('tab',newcat);
+    
+        if (newcat == "Office") {
+          document.getElementById("homebtn").classList.remove("active");
+          document.getElementById("officebtn").classList.add("active");
+        //   setCategory("Office")
+    
+        } else {
+          document.getElementById("officebtn").classList.remove("active");
+          document.getElementById("homebtn").classList.add("active");
+        //   setCategory("Home")
+    
+        }
+        // localStorage.setItem("tab",newcat)
+    
+        setActive(localStorage.getItem("tab"));
+        // setCategory(localStorage.getItem("tab"));
+        
+        getBoxPackages(newcat, "Box Packages", '1 Week')
+        .then((res) => {
+        //   clearCart(ReactSession.get('session'));
+       
+          setProduct(res?.data);
+        })
+        .catch((e) => console.log(e));
+        //wait
+        };
 
     const hideZipM = () => {
         setZipModal(false);
@@ -17,8 +52,8 @@ export default function Index() {
     };
 
     function getBoxProducts() {
-
-        getBoxPackages("Home", "Box Packges", "1")
+        // props.category, props.sub_category,
+        getBoxPackages("Home", "Box Packages", "1")
             .then((res) => {
                 setProduct(res?.data);
                 // console.log(res)
@@ -34,21 +69,35 @@ export default function Index() {
 
     }, []);
 
+    function toggleModalFunction(argu) {
+        setToggleModal(argu);   
+    }
 
     return (
         <>
-            <ZipCode showModal={openZipModal} hideModal={hideZipM} />
+            <ZipCode 
+            showModal={openZipModal}
+             hideModal={true}
+            toggleModal={toggleModal}
+            toggleModalFunction={toggleModalFunction}
+             showHideHeader={props.showHideHeader} 
+            setShowHideHeader={props.setShowHideHeader}
+            showHideFooter={props.showHideFooter}
+            setshowHideFooter={props.setshowHideFooter}
+            showHideinnerFooter={props.showHideinnerFooter}
+            setshowHideinnerFooter={props.setshowHideinnerFooter}
+            />
             {/* hero */}
             {/* {product} */}
             <section className="hero pricing position-relative">
                 <div className="container">
                     <div className="text-center">
                         <h1 className="text-white" data-aos="fade-down" data-aos-delay="0" data-aos-duration="1000">
-                            Box <span className="font-weight-bold">Rental <span className="text-primary">Packages</span></span>
+                            <span className="font-weight-bold"> Box Rental Packages</span>
                         </h1>
                         <div className="col-md-12">
-                            <button className="rounded-right active " onclick="redirect()">HOME</button>
-                            <button className="rounded-left officebtn" id="officebtn" value="Office">OFFICE</button>
+                        <button className={`rounded-right ${(active=='Home')?'active':''} homebtn`} id="homebtn" value="Home" onClick={(e) => setnewcategory('Home')} >HOME</button>
+              <button className={`rounded-left ${(active=='Office')?'active':''} officebtn`} id="officebtn" value="Office" onClick={(e) => setnewcategory('Office')}>OFFICE</button>
                         </div>
                     </div>
                 </div>
@@ -58,389 +107,71 @@ export default function Index() {
             <section className="pricing py-5">
                 <div className="container-fluid">
                     <div className="row">
-
-                        <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000">
-                            <div className="card">
-                                <div className="card-header bg-primary text-center">
-                                    <p className="text-white m-0">1 BEDROOM</p>
-                                </div>
-                                <div className="card-body-main">
-                                    <div className="text-center">
-                                        <h2>$109</h2>
-                                        <p className="fs-14 mb-0">First week</p>
-                                        <p className="fs-14">Additional Weeks: $40</p>
-                                        <p className="border-top border-bottom">40 Bluebox Boxes </p>
-
+                        {product.results?.slice(0, 5).map((obj) => {
+                            // console.log(obj);
+                            return (
+                                <>
+                                    <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000">
+                                        <div className="card">
+                                            <div className="card-header bg-danger">
+                                                <div className="text-center">
+                                                    <h3 className="text-white">{obj.title}</h3>
+                                                    <p className="text-white">{obj.total_boxes} Boxes</p>
+                                                </div>
+                                            </div>
+                                            <div class="bins">
+                                                {/* <div class="bins_round">
+                                            <h5>{obj.total_boxes}</h5>
+                                            <span>Box</span>
+                                            </div> */}
+                                                <div class="round_box">
+                                                    {/* <img src="img/bins.png" /> */}
+                                                    <h5>{obj.total_boxes}</h5>
+                                                </div>
+                                            </div>
+                                            <div className="card-body">
+                                                <div className="text-center">
+                                                    <h2>
+                                                        <span className="top fs-14 crs">$</span>
+                                                        {obj.price}
+                                                        <span className="middle fs-14">
+                                                            {/* / {obj.period} */}
+                                                        </span>
+                                                    </h2>
+                                                    <ul className="mt-3">
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: obj.description,
+                                                            }}
+                                                        ></div>
+                                                    </ul>
+                                                    <div className="text-center mt-3 orderbtn">
+                                                        <button className="btn btn-dark" style={{ margintop: "55px" }} onClick={() => {showZipModal(); setToggleModal(true)}}>Order Now</button>
+                                                    </div>
+                                                    {/* <div className="radio-toolbar">
+                                                        <input
+                                                            type="radio"
+                                                            id={obj.id}
+                                                            name="radio"
+                                                            value="ADD PACKAGE"
+                                                            //   onClick={() => handlePackageClick(obj)}
+                                                            // onClick={() => handlePackageClick(obj.id,obj.quantity,session,obj.product_main_category,obj.period)}
+                                                            style={{ display: "none" }}
+                                                        />
+                                                        <label
+                                                            className="btn btn-danger mt-3"
+                                                            htmlFor={obj.id}
+                                                        >
+                                                        </label>
+                                                    </div> */}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <table className="table-pricing">
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    25 Large Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    1 Moving Dolly
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    25 Box Labels
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Free Delivery & Pickup
+                                </>);
+                        })}
 
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Rec. for 250-500 sqft.
-                                                </p>
-                                            </td>
-                                        </tr>
-
-
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0 fw-700">
-                                                    No Tax! We'll Cover It!
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <div className="text-center mt-3">
-                                        <button className="btn btn-dark" onClick={() => showZipModal()}>Oreder Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="300" data-aos-duration="1000">
-                            <div className="card">
-                                <div className="card-header bg-primary text-center">
-                                    <p className="text-white m-0">2 BEDROOM</p>
-                                </div>
-                                <div className="card-body-main">
-                                    <div className="text-center">
-                                        <h2>$159</h2>
-                                        <p className="fs-14 mb-0">First week</p>
-                                        <p className="fs-14">Additional Weeks: $50</p>
-                                        <p className="border-top border-bottom">40 Bluebox Boxes </p>
-
-                                    </div>
-                                    <table className="table-pricing">
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    35 Large Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    5 Medium Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    1 Moving Dolly
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    40 Box Labels
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Free Delivery & Pickup
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Rec. for 1000-1500 sqft.
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0 fw-700">
-                                                    No Tax! We'll Cover It!
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <div className="text-center mt-3">
-                                        <button className="btn btn-dark" style={{ margintop: "29px" }} onClick={() => showZipModal()}>Oreder Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="600" data-aos-duration="1000">
-                            <div className="card">
-                                <div className="card-header bg-primary text-center">
-                                    <p className="text-white m-0">3 BEDROOM</p>
-                                </div>
-                                <div className="card-body-main">
-                                    <div className="text-center">
-                                        <h2>$209</h2>
-                                        <p className="fs-14 mb-0">First week</p>
-                                        <p className="fs-14">Additional Weeks: $60</p>
-                                        <p className="border-top border-bottom">60 Bluebox Boxes </p>
-                                    </div>
-                                    <table className="table-pricing">
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    50 Large Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    5 Medium Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    5 Extra Large Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    1 Moving Dolly
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    60 Box Labels
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Free Delivery & Pickup
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Rec. for 1000-1500 sqft.
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0 fw-700">
-                                                    No Tax! We'll Cover It!
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <div className="text-center mt-3">
-                                        <button className="btn btn-dark" style={{ margintop: "56px" }} onClick={() => showZipModal()}>Oreder Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="900" data-aos-duration="1000">
-                            <div className="card">
-                                <div className="card-header bg-primary text-center">
-                                    <p className="text-white m-0">4 BEDROOM</p>
-                                </div>
-                                <div className="card-body-main">
-                                    <div className="text-center">
-                                        <h2>$259</h2>
-                                        <p className="fs-14 mb-0">First week</p>
-                                        <p className="fs-14">Additional Weeks: $70</p>
-                                        <p className="border-top border-bottom">80 Bluebox Boxes </p>
-
-                                    </div>
-                                    <table className="table-pricing">
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    70 Large Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    5 Medium Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    5 Extra Large Boxes
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    1 Moving Dolly
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    80 Box Labels
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Free Delivery & Pickup
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0">
-                                                    Rec. for 1000-1500 sqft.
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="border-0">
-                                                <i className="fa fa-check"></i>
-                                            </td>
-                                            <td className="border-0">
-                                                <p className="text-primary mb-0 fw-700">
-                                                    No Tax! We'll Cover It!
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <div className="text-center mt-3">
-                                        <button className="btn btn-dark" onClick={() => showZipModal()}>Oreder Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="1200" data-aos-duration="1000">
+                        {/* <div className="col-lg col-md-4 col-sm-6 p-2" data-aos="fade-right" data-aos-delay="1200" data-aos-duration="1000">
                             <div className="card">
                                 <div className="card-header bg-primary text-center">
                                     <p className="text-white m-0">5 BEDROOM</p>
@@ -541,9 +272,7 @@ export default function Index() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-
+                        </div> */}
 
                     </div>
                 </div>
@@ -558,14 +287,14 @@ export default function Index() {
             {/* <!-- free delivery  */}
             {/* gallery  */}
             <section className="gallery py-4">
-      <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-                <img src="img/box.png"/>
-            </div>
-          </div>
-      </div>
-  </section>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <img src="img/box.png" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </section>
             {/* gallery Slider  */}
         </>
     );

@@ -1,7 +1,8 @@
 import "./App.css";
+import React, { useEffect, useState } from "react";
 import { ToastProvider } from "react-toast-notifications";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import React from "react";
+// import React from "react";
 import Header from "./views/layout/Header";
 import Footer from "./views/layout/Footer";
 import Innerfooter from "./views/layout/Footer-inne"
@@ -24,13 +25,32 @@ import Officemoving from "./views/Officemoving"
 
 
 export default function App() {
-
+  
   const [showHideHeader, setShowHideHeader] = React.useState(true);
   const [showHideFooter, setshowHideFooter] = React.useState(true);
   const [showHideinnerFooter, setshowHideinnerFooter] = React.useState(false);
   const [showFooteroffice, setFooteroffice] = React.useState(false);
+
+ 
+  // const [values, setValues] = React.useState({
+  //   pickup_zipcode: "",
+  //   delivery_zipcode: "",
+  // });
  
   function requireAuth() {
+
+    // if(localStorage.getItem('setShowHideHeader')){
+    //   setShowHideHeader(localStorage.getItem('setShowHideHeader'));
+    //   // console.log(localStorage.getItem('setShowHideHeader'))
+    // }
+    // if(localStorage.getItem('setshowHideFooter')){
+    //   setshowHideFooter(localStorage.getItem('setshowHideFooter'));
+    //   // console.log(localStorage.getItem('setshowHideFooter'))
+    // }
+    // if(localStorage.getItem('setshowHideinnerFooter')){
+    //   setshowHideinnerFooter(localStorage.getItem('setshowHideinnerFooter'));
+    //   // console.log(localStorage.getItem('setshowHideinnerFooter'))
+    // }
 
     if (!localStorage.getItem('zipcode')) {
       window.location.replace('/');
@@ -51,7 +71,21 @@ export default function App() {
     }
     }
   }
-  }
+}
+React.useEffect(() => {
+  // console.log("demo")
+  // console.log("demo")
+  // console.log("demo")
+  // if(localStorage.getItem('setShowHideHeader')){
+  //   setShowHideHeader(localStorage.getItem('setShowHideHeader'));
+  // }
+  // if(localStorage.getItem('setshowHideFooter')){
+  //   setshowHideFooter(localStorage.getItem('setshowHideFooter'));
+  // }
+  // if(localStorage.getItem('setshowHideinnerFooter')){
+  //   setshowHideinnerFooter(localStorage.getItem('setshowHideinnerFooter'));
+  // }
+}, []);
 
 
   return (
@@ -65,26 +99,51 @@ export default function App() {
             setshowHideFooter={setshowHideFooter}
             showHideinnerFooter={showHideinnerFooter}
             setshowHideinnerFooter={setshowHideinnerFooter}
-
+            // values={values}
+            // setValues={setValues}
 
           />}
           <Switch>
             <Route path="/" exact component={() => <Home />} />
-            <Route path="/pricing" exact component={() => <Pricing />} />
+            <Route path="/pricing" exact component={() => <Pricing 
+               showFooteroffice={showFooteroffice}
+               setFooteroffice={setFooteroffice}     
+               setshowHideFooter={setshowHideFooter}
+               showHideinnerFooter={showHideinnerFooter}     
+
+               showHideHeader={showHideHeader}
+               setShowHideHeader={setShowHideHeader}
+               showHideFooter={showHideFooter}
+               setshowHideFooter={setshowHideFooter}
+               showHideinnerFooter={showHideinnerFooter}
+               setshowHideinnerFooter={setshowHideinnerFooter}
+
+            />} />
             <Route path="/MovingBoxes" exact component={() => <MovingBoxes />} />
             <Route path="/MovingSupplies" exact component={() => <MovingSupplies />} />
             <Route path="/Location" exact component={() => <Location />} />
 
 
             <Route path="/Faq" exact component={() => <Faq />} />
-            <Route path="/Privacypolicy" exact component={() => <Privacypolicy />} />
+            <Route path="/Privacypolicy" exact component={() => <Privacypolicy
+              showFooteroffice={showFooteroffice}
+              setFooteroffice={setFooteroffice}     
+              setshowHideFooter={setshowHideFooter}
+              showHideinnerFooter={showHideinnerFooter}  
+            />} />
             <Route path="/Contactus" exact component={() => <Contactus
                showFooteroffice={showFooteroffice}
                setFooteroffice={setFooteroffice}     
                setshowHideFooter={setshowHideFooter}
                showHideinnerFooter={showHideinnerFooter}      
             />} />
-            <Route path="/Terms" exact component={() => <Terms />} />
+            <Route path="/Terms" exact component={() => <Terms 
+               showFooteroffice={showFooteroffice}
+               setFooteroffice={setFooteroffice}     
+               setshowHideFooter={setshowHideFooter}
+               showHideinnerFooter={showHideinnerFooter}     
+              
+            />} />
 
             <Route path="/Homemoving" exact component={() => <Homemoving />} />
             
@@ -96,7 +155,7 @@ export default function App() {
             />} />
 
             <Route
-              path="/box-packges"
+              path="/box-packages"
               exact component={() => <BoxPackages
                 showHideHeader={showHideHeader}
                 setShowHideHeader={setShowHideHeader}
@@ -107,7 +166,12 @@ export default function App() {
                 onEnter={requireAuth()}
               />}
             />
-            <Route path="/About" exact component={() => <About />} />
+            <Route path="/About" exact component={() => <About
+              showFooteroffice={showFooteroffice}
+              setFooteroffice={setFooteroffice}     
+              setshowHideFooter={setshowHideFooter}
+              showHideinnerFooter={showHideinnerFooter}     
+            />} />
 
           </Switch>
           {showHideinnerFooter && <Innerfooter />}

@@ -28,7 +28,7 @@ export default function ZipCode(props) {
     checkZipCode(obj)
       .then((res) => {
         if (res?.data?.success) {
-          history.push("/box-packges");
+          history.push("/box-packages");
           props.hideModal()
         } else {
           setError(true);

@@ -24,6 +24,8 @@ export default function Index() {
     const [rental4, setRental4] = useState([]);
     const [rental5, setRental5] = useState([]);
     const [rental6, setRental6] = useState([]);
+    
+    const [toggleModal, setToggleModal] = useState(true);
 
 
     async function getrentalprice(id) {
@@ -76,7 +78,9 @@ export default function Index() {
             })
             .catch((e) => console.log(e));
     };
-
+    function toggleModalFunction(argu) {
+        setToggleModal(argu);   
+    }
     React.useEffect((props) => {
         getRentals();
         getBoxProducts();
@@ -84,15 +88,17 @@ export default function Index() {
     }, []);
     return (
         <>
-            <ZipCode showModal={openZipModal} hideModal={hideZipM} />
+            <ZipCode showModal={openZipModal} hideModal={hideZipM} 
+            toggleModal={toggleModal}
+            toggleModalFunction={toggleModalFunction}/>
             <section className="hero move-home position-relative">
                 <div className="container">
                     <div className="text-center">
                         <h1 className="text-white" data-aos="fade-down" data-aos-delay="0" data-aos-duration="1000">
-                            Why Rent <span className="font-weight-bold">Moving <span className="text-primary">Boxes</span></span>
+                            <span className="font-weight-bold"> Home Moving Box Rentals</span>
                         </h1>
                         <button className="btn btn-primary px-4 mt-2" data-aos="fade-down" data-aos-delay="400"
-                            data-aos-duration="1000" onClick={() => showZipModal()} >Order Now</button>
+                            data-aos-duration="1000" onClick={() => {showZipModal(); setToggleModal(true)}} >Order Now</button>
                     </div>
                 </div>
             </section>

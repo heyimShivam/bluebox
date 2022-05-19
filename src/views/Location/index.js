@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Spinner } from "react-bootstrap";
+import React, { useEffect } from "react";
+import {  Spinner } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { checkZipCode, getLocations } from "../../data/API";
 
 export default function Index(props) {
     const history = useHistory();
-    const { addToast } = useToasts();
+    // const { addToast } = useToasts();
     const [isLoading, setLoading] = React.useState(false);
     const [isError, setError] = React.useState(false);
     const [errorMsg, setMsg] = React.useState("");
@@ -32,7 +32,7 @@ export default function Index(props) {
             .then((res) => {
                 // console.log(res);
                 if (res?.data?.success) {
-                    history.push("/box-packges");
+                    history.push("/box-packages");
                     props.hideModal();
                     props.setShowHideHeader(false);
                     props.setshowHideFooter(false);
@@ -91,8 +91,8 @@ export default function Index(props) {
                                     <div className="">
                                         <div className="">
                                             <div className="modal-header">
+                                            <img src="img/logo.png" className="img-fluid" alt="" />
                                                 <h5>
-                                                    <img src="img/icon-truck.png" className="img-fluid" alt="" />
                                                     Where are you moving?
                                                 </h5>
                                                 {/* <button type="button" className="close" onClick={props.hideModal}>
