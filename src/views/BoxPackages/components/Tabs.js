@@ -147,7 +147,7 @@ export default function Tabs() {
 
   return (
     <>
-      <section className="tabsSection  stepheader" id="tabsSection">
+      <section className="tabsSection  stepheader" id="tabsSection" style={{paddingTop:'150px'}}>
         <div className="container">
           <div className="row">
             <nav className="navbar navbar-expand-lg navbar-light bg-transparent px-0">
