@@ -240,7 +240,7 @@ export default function Orderpreview(props) {
       }
 
       <div className="col-sm-6 ">
-        <label>Total Cost: <b>  {total}</b></label>
+        <label>Total Cost: <b>  {Number(Number(total) + Number(box?.cart_price))}</b></label>
       </div>
    
     </div>
